@@ -1,0 +1,58 @@
+{
+  "kind": "build_request",
+  "title": "Fix missing scrolling in coach profile detail modal (posts/jobs/comments overflow)",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Fix the coach profile detail view so the user can scroll through content that exceeds the viewport height when viewing someone’s profile, including the Posts, Jobs, and Comments tabs, without the content being clipped off-screen.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "it is still not allowing me to scroll when i view someones profile, posts, jobs, and comments that goes past the viewing screen"
+        ]
+      },
+      "acceptanceCriteria": [
+        "When opening another coach’s profile modal, the content area scrolls vertically with mouse wheel/trackpad on desktop and swipe on mobile.",
+        "In the Posts tab, a long list of posts can be fully scrolled from top to bottom inside the modal.",
+        "In the Jobs tab, a long list of jobs can be fully scrolled from top to bottom inside the modal.",
+        "In the Comments tab, a long list of comments can be fully scrolled from top to bottom inside the modal.",
+        "The modal header area (name/avatar/follow buttons) remains visible while scrolling the modal body (or, if it scrolls away by design, scrolling still works reliably and content is not clipped).",
+        "Scrolling does not get “stuck” due to nested overflow containers (i.e., no combination of `overflow-hidden` + missing height prevents scrolling)."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Update the layout/overflow strategy in `frontend/src/components/CoachProfileDetailModal.tsx` so the scroll container has a deterministic height (e.g., via flex layout with a bounded parent, or via a direct `overflow-y-auto` body region), and ensure the chosen approach works with shadcn Dialog without modifying any files under `frontend/src/components/ui`.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "it is still not allowing me to scroll when i view someones profile, posts, jobs, and comments that goes past the viewing screen"
+        ]
+      },
+      "acceptanceCriteria": [
+        "No edits are made to any `frontend/src/components/ui/*` files (they must be composed/used as-is).",
+        "The scrollable region is bounded (e.g., modal uses `max-h-[90vh]` and the body region scrolls within that bound) and does not rely on an element with `height: 100%` unless all parent heights are explicitly defined.",
+        "Regression check: the Job Board dialogs that already use `max-h-[90vh] overflow-y-auto` continue to scroll correctly."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not edit any files under `frontend/src/components/ui` (immutable).",
+    "Frontend user-facing text must be English."
+  ],
+  "nonGoals": [
+    "Changing backend logic, schemas, or APIs.",
+    "Redesigning the entire profile modal UI beyond what is necessary to restore scrolling behavior."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

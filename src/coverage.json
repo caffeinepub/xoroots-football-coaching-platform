@@ -1,0 +1,49 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-04T14:53:00.532Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 2,
+    "implemented": 2,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "Fix the coach profile detail view so the user can scroll through content that exceeds the viewport height when viewing someone’s profile, including the Posts, Jobs, and Comments tabs, without the content being clipped off-screen.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/CoachProfileDetailModal.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/CoachProfileDetailModal.tsx"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Update the layout/overflow strategy in `frontend/src/components/CoachProfileDetailModal.tsx` so the scroll container has a deterministic height (e.g., via flex layout with a bounded parent, or via a direct `overflow-y-auto` body region), and ensure the chosen approach works with shadcn Dialog without modifying any files under `frontend/src/components/ui`.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/CoachProfileDetailModal.tsx",
+          "frontend/src/components/JobBoard.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/CoachProfileDetailModal.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/components/CoachProfileDetailModal.tsx",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

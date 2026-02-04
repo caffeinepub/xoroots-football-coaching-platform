@@ -1,0 +1,250 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 7,
+  "summary": "XOROOTS Football Coaching Platform is a web app (React + Tailwind/shadcn) backed by an Internet Computer (DFINITY) Motoko canister. Users authenticate via Internet Identity, get an initialized coach profile, and can network with other coaches through a searchable directory and a follow system. The platform includes a social feed with media attachments, likes and comments, a job board with applications, and messaging (direct and group). Admins are managed via a secret-token bootstrapped access-control system and have moderation capabilities (admin badge, report-triggered banner notifications, and user deletion).",
+  "existing_features": [
+    {
+      "id": "IF-1",
+      "title": "Internet Identity authentication & session restoration",
+      "synonyms": [
+        "II login",
+        "AuthClient session restore"
+      ],
+      "description": "Provides login/logout via Internet Identity with automatic restoration of existing sessions on page load and long-lived delegations; exposes identity and status via a React context provider.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-2",
+      "title": "Per-identity backend actor creation and initialization",
+      "synonyms": [
+        "DFINITY actor hook",
+        "canister client"
+      ],
+      "description": "Creates an anonymous or authenticated canister actor depending on identity; on authenticated sessions calls _initializeAccessControlWithSecret using a secret token sourced from the URL hash/session, and invalidates/refetches dependent React Query caches when the actor changes.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-3",
+      "title": "Role-based access control with admin bootstrapping",
+      "synonyms": [
+        "RBAC",
+        "admin token initialization"
+      ],
+      "description": "Backend AccessControl assigns roles (#admin/#user/#guest). First eligible caller providing the correct secret token becomes admin; subsequent callers become users. Includes admin checks and admin-only role assignment APIs via MixinAuthorization.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-4",
+      "title": "Coach profile auto-initialization and retrieval",
+      "synonyms": [
+        "default profile creation",
+        "initializeCallerProfile"
+      ],
+      "description": "On first authenticated use, ensures a CoachProfile exists for the caller (created with default fields if missing) and supports fetching caller profile and any coach profile.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-5",
+      "title": "Coach profile management (edit, save, photo upload)",
+      "synonyms": [
+        "My Profile",
+        "profile editor"
+      ],
+      "description": "Allows users to save and update their coaching profile (name, experience, specialty, bio, certifications, positions coached, coaching roles, location) and upload a profile photo as an ExternalBlob; includes UI for edit/view modes with dark-mode styling.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-6",
+      "title": "Coach directory with search and member count",
+      "synonyms": [
+        "coach list",
+        "directory search"
+      ],
+      "description": "Displays all coach profiles with client-side filtering by name/specialty/location/positions/roles/certifications and shows total coach count; supports opening a detailed profile modal for a selected coach.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-7",
+      "title": "Follow system (follow/unfollow, followers/following, status checks)",
+      "synonyms": [
+        "network graph",
+        "following"
+      ],
+      "description": "Implements followCoach/unfollowCoach, follower/following retrieval, counts, and isFollowing checks; UI provides follow buttons in directory and profile modal and shows followers/following lists in the detail modal.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-8",
+      "title": "Social feed with media posts",
+      "synonyms": [
+        "posts timeline",
+        "attachments feed"
+      ],
+      "description": "Users can create posts with text and media attachments, view the feed, and see posts categorized into For You vs Following. Posts include likes and comments and render attached media via direct blob URLs.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-9",
+      "title": "Post engagement (like/unlike, commenting)",
+      "synonyms": [
+        "post likes",
+        "add comment"
+      ],
+      "description": "Supports toggling likes on posts and adding comments to posts; UI updates via cache invalidation and displays counts and timestamps.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-10",
+      "title": "Post editing with attachment management",
+      "synonyms": [
+        "edit post modal",
+        "updatePost"
+      ],
+      "description": "Authors can edit their own posts via a modal: update content, keep existing attachments, remove existing attachments, and add new uploaded files (converted to ExternalBlob).",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-11",
+      "title": "Comment management (delete own comment, like/unlike comment)",
+      "synonyms": [
+        "comment likes",
+        "comment deletion"
+      ],
+      "description": "Allows users to like/unlike comments and delete their own comments. UI provides per-comment like counts and delete action for the author.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-12",
+      "title": "Feed filtering and viewed-post tracking (client-side)",
+      "synonyms": [
+        "sort feed",
+        "not viewed filter"
+      ],
+      "description": "Feed UI supports sorting by newest/most liked/most commented and filtering to posts not viewed yet. Viewed state is persisted in localStorage per browser.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-13",
+      "title": "Job board (post jobs, view details, apply, track applications)",
+      "synonyms": [
+        "job postings",
+        "applications"
+      ],
+      "description": "Users can post coaching jobs with structured fields, browse and view job details, apply with a cover letter, and view their own submitted applications; UI indicates applied status.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-14",
+      "title": "Messaging (direct messages + group messages API)",
+      "synonyms": [
+        "DMs",
+        "chat"
+      ],
+      "description": "Backend supports sending and fetching direct messages between two principals and group messages by groupId. Frontend provides a MessagingHub UI for direct messaging with a connections list.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-15",
+      "title": "Admin moderation and administration UI",
+      "synonyms": [
+        "admin tools",
+        "account deletion"
+      ],
+      "description": "Provides admin role checks, admin badge display, and admin-only account deletion (deleteUser). UI surfaces delete-account actions in directory cards and profile detail modal for eligible targets.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-16",
+      "title": "Admin reports and banner notifications",
+      "synonyms": [
+        "report submission",
+        "admin banner"
+      ],
+      "description": "Users can submit a report that triggers an admin notification flag; admins poll for notifications and can dismiss the banner, showing an in-app alert at the top of the UI.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-17",
+      "title": "Blob storage maintenance mixin (gateway authorization, pruning, refill)",
+      "synonyms": [
+        "caffeine storage",
+        "blob GC support"
+      ],
+      "description": "Includes canister methods for updating authorized gateway principals, listing/pruning dead blobs with an authorization check, triggering Motoko GC, refilling a cashier canister with cycles, and producing a simple upload certificate response.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-18",
+      "title": "App shell, theming, and UX utilities",
+      "synonyms": [
+        "dashboard tabs",
+        "dark mode"
+      ],
+      "description": "Implements LandingPage for unauthenticated users, Dashboard tab navigation, Header with theme toggle and user dropdown, Footer, and toast notifications; Tailwind configuration supports OKLCH design tokens for consistent light/dark themes.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-coach-profile-detail-view-so-the-user-can-scroll-through-content-that-exceeds-the-viewport-height-when-viewing-someone-s-profile-including-the-posts-jobs-and-comments-tabs-without-the-content-being-clipped-off-screen",
+      "title": "Fix the coach profile detail view so the user can scroll through content that exceeds the viewport height when viewing someone’s profile, including the Posts, Jobs, and Comments tabs, without the content being clipped off-screen.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-layout-overflow-strategy-in-frontend-src-components-coachprofiledetailmodal-tsx-so-the-scroll-container-has-a-deterministic-height-e-g-via-flex-layout-with-a-bounded-parent-or-via-a-direct-overflow-y-auto-body-region-and-ensure-the-chosen-approach-works-with-shadcn-dialog-without-modifying-any-files-under-frontend-src-components-ui",
+      "title": "Update the layout/overflow strategy in `frontend/src/components/CoachProfileDetailModal.tsx` so the scroll container has a deterministic height (e.g., via flex layout with a bounded parent, or via a direct `overflow-y-auto` body region), and ensure the chosen approach works with shadcn Dialog without modifying any files under `frontend/src/components/ui`.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [],
+  "architectural_notes": [
+    "Frontend uses @tanstack/react-query for all backend calls with centralized hooks (useQueries.ts) and aggressive cache invalidation after mutations.",
+    "DFINITY actor creation is encapsulated in useActor; actor is recreated per-identity and triggers invalidation/refetch of all non-actor queries on change.",
+    "Authentication/session management is provided via an InternetIdentityProvider wrapper around @dfinity/auth-client with long-lived delegation (30 days) and restoration on reload.",
+    "Backend is a single Motoko canister using in-memory mo:core Map/Set/List collections for profiles, posts, jobs, follow relations, messages, and admin banners.",
+    "Authorization is implemented as a mixin (MixinAuthorization) over an AccessControl state with roles (#admin/#user/#guest) and first-admin bootstrapping via a secret token compared against an environment variable.",
+    "Blob/media handling uses a storage mixin (MixinStorage) and a Storage module exposing authorization for gateway principals, deletion GC hooks, and a certificate stub used for uploads.",
+    "Feed categorization is computed server-side (forYou vs following) based on followRelations; client adds additional sorting/filtering (including local viewed-post tracking).",
+    "UI is organized around a tabbed Dashboard (Feed, Coaches, Jobs, Messages, Profile) with a LandingPage for unauthenticated users, Header/Footer layout, theme toggle, and toast notifications (sonner).",
+    "ExternalBlob objects are used across the app to upload and render profile photos and post attachments via getDirectURL().",
+    "Backend now includes an explicit migration/stabilization layer (migration.mo) to support preserving canister state across upgrades and coordinating schema/state migrations."
+  ],
+  "known_issues": [
+    "Mismatch between frontend and backend delete permissions: UI allows authors to delete their own posts/jobs, but backend deletePost and deleteJobPosting are admin-only, causing runtime traps for non-admin authors.",
+    "Admin user deletion in backend (deleteUser) only removes the coach profile record; it does not remove the user’s posts, jobs, comments, follow relations, messages, or applications, despite UI copy stating all will be removed.",
+    "\"Connections\" APIs are marked deprecated in hooks but still used by MessagingHub; backend connectWithCoach also writes into the same followRelations structure, making semantics potentially inconsistent/confusing.",
+    "AccessControl.getUserRole traps with \"User is not registered\" for principals not initialized; some frontend error handling only checks for \"Unauthorized\" and may not gracefully handle this trap text in all queries.",
+    "AdminBanner polling is duplicated: react-query has refetchInterval and the component also sets its own setInterval(refetch), creating redundant network traffic.",
+    "Environment variable names for storage cashier principal appear typo-prone/inconsistent (e.g., \"CAFFFEINE_STORAGE_CASHIER_PRINCIPAL\" spelling), risking misconfiguration at deploy time.",
+    "Viewed-post tracking in the UI is stored in localStorage; backend supports markPostViewed/markPostsViewed but the main feed UI currently only updates local state (not persisting to backend).",
+    "Coach/admin badge logic in some UI places is simplified (e.g., comment admin detection checks only current user), not a full role lookup per author.",
+    "Profile view modal (including tabs for posts/jobs/comments) still does not scroll; content overflows past viewport, preventing viewing full information."
+  ],
+  "isFixRequest": true,
+  "gameProjectType": "none",
+  "projectName": "XOROOTS Football Coaching Platform",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

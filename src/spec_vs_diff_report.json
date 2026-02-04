@@ -1,0 +1,31 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-04T14:53:00.491Z",
+  "summary": "Diff shows changes to `frontend/src/components/CoachProfileDetailModal.tsx` adding a bounded modal container (`max-h-[90vh]`, `flex flex-col`), but the provided diff is truncated before any `overflow-y-auto`/scroll container or tab body layout is visible. No evidence of edits under `frontend/src/components/ui/*` appears in the diff summary.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Fix the coach profile detail view so the user can scroll through content that exceeds the viewport height in Posts/Jobs/Comments tabs without clipping.",
+      "reason": "The diff excerpt only shows `DialogContent` being given `max-h-[90vh]` and a flex column layout, but does not show any actual scroll container (`overflow-y-auto`) or height-bounded body region for the modal content/tabs. Because the file is truncated, there is insufficient evidence that Posts/Jobs/Comments long lists are scrollable and not clipped, or that nested overflow issues were resolved.",
+      "evidence": [
+        "frontend/src/components/CoachProfileDetailModal.tsx (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "requirement": "Update `frontend/src/components/CoachProfileDetailModal.tsx` layout/overflow so the scroll container has deterministic height and works with shadcn Dialog without modifying `frontend/src/components/ui` files.",
+      "reason": "While `max-h-[90vh]` and `flex flex-col` suggest an approach toward deterministic sizing, the diff does not show the bounded scrollable region (e.g., a dedicated body wrapper with `overflow-y-auto` and appropriate flex/min-height settings). Due to truncation, it cannot be verified that the chosen strategy is fully implemented and avoids `height: 100%` pitfalls/nested overflow traps.",
+      "evidence": [
+        "frontend/src/components/CoachProfileDetailModal.tsx (truncated)"
+      ]
+    }
+  ],
+  "hallucinated_features": [],
+  "confidence": 0.46,
+  "changed_files": [
+    "frontend-file-summaries.txt",
+    "frontend/src/components/CoachProfileDetailModal.tsx",
+    "project_state.json"
+  ]
+}

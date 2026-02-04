@@ -1,0 +1,47 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Restore scrolling within CoachProfileDetailModal content area",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Ensure the coach profile detail modal body scrolls vertically for overflowing content across Posts, Jobs, and Comments tabs without clipping.",
+      "acceptanceCriteria": [
+        "When opening another coach’s profile modal, the content area scrolls vertically with mouse wheel/trackpad on desktop and swipe on mobile.",
+        "In the Posts tab, a long list of posts can be fully scrolled from top to bottom inside the modal.",
+        "In the Jobs tab, a long list of jobs can be fully scrolled from top to bottom inside the modal.",
+        "In the Comments tab, a long list of comments can be fully scrolled from top to bottom inside the modal.",
+        "The modal header area (name/avatar/follow buttons) remains visible while scrolling the modal body (or, if it scrolls away by design, scrolling still works reliably and content is not clipped).",
+        "Scrolling does not get “stuck” due to nested overflow containers (i.e., no combination of `overflow-hidden` + missing height prevents scrolling)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/CoachProfileDetailModal.tsx",
+          "operation": "modify",
+          "description": "Refactor the modal layout so the modal body (including Tabs content) is the sole vertical scroll container with a bounded height. Use a deterministic flex layout (e.g., header as flex-shrink-0, body as flex-1 with min-h-0) and apply overflow-y-auto (plus mobile-friendly touch scrolling) to the body region so Posts/Jobs/Comments lists can scroll fully without being clipped."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Update CoachProfileDetailModal overflow strategy to use a deterministic-height scroll container compatible with shadcn Dialog, without modifying any ui components.",
+      "acceptanceCriteria": [
+        "No edits are made to any `frontend/src/components/ui/*` files (they must be composed/used as-is).",
+        "The scrollable region is bounded (e.g., modal uses `max-h-[90vh]` and the body region scrolls within that bound) and does not rely on an element with `height: 100%` unless all parent heights are explicitly defined.",
+        "Regression check: the Job Board dialogs that already use `max-h-[90vh] overflow-y-auto` continue to scroll correctly."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/CoachProfileDetailModal.tsx",
+          "operation": "modify",
+          "description": "Adjust the modal container/scroll region composition to work reliably with shadcn Dialog by ensuring the scroll container has an explicit bound (retain max-h-[90vh]) and that the immediate flex child uses min-h-0 to allow scrolling. Avoid nested competing overflow regions (e.g., remove or constrain the current ScrollArea usage if it introduces nested overflow/height ambiguity) while keeping `frontend/src/components/ui/*` files unchanged."
+        },
+        {
+          "path": "frontend/src/components/JobBoard.tsx",
+          "operation": "modify",
+          "description": "Perform a regression-focused pass to confirm Job Board dialogs continue to use their existing bounded scrolling pattern (max-h-[90vh] with overflow-y-auto) and remain unaffected by the CoachProfileDetailModal scrolling changes. Keep behavior and user-facing text unchanged."
+        }
+      ]
+    }
+  ]
+}

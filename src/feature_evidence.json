@@ -1,0 +1,45 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-fix-the-coach-profile-detail-view-so-the-user-can-scroll-through-content-that-exceeds-the-viewport-height-when-viewing-someone-s-profile-including-the-posts-jobs-and-comments-tabs-without-the-content-being-clipped-off-screen",
+      "featureTitle": "Fix the coach profile detail view so the user can scroll through content that exceeds the viewport height when viewing someone’s profile, including the Posts, Jobs, and Comments tabs, without the content being clipped off-screen.",
+      "files": [
+        "frontend/src/components/CoachProfileDetailModal.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-layout-overflow-strategy-in-frontend-src-components-coachprofiledetailmodal-tsx-so-the-scroll-container-has-a-deterministic-height-e-g-via-flex-layout-with-a-bounded-parent-or-via-a-direct-overflow-y-auto-body-region-and-ensure-the-chosen-approach-works-with-shadcn-dialog-without-modifying-any-files-under-frontend-src-components-ui",
+      "featureTitle": "Update the layout/overflow strategy in `frontend/src/components/CoachProfileDetailModal.tsx` so the scroll container has a deterministic height (e.g., via flex layout with a bounded parent, or via a direct `overflow-y-auto` body region), and ensure the chosen approach works with shadcn Dialog without modifying any files under `frontend/src/components/ui`.",
+      "files": [
+        "frontend/src/components/CoachProfileDetailModal.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
