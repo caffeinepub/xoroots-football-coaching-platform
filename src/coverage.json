@@ -1,7 +1,7 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-04T14:53:00.532Z",
+  "generatedAt": "2026-02-05T15:01:01.717Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
@@ -12,35 +12,35 @@
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Fix the coach profile detail view so the user can scroll through content that exceeds the viewport height when viewing someone’s profile, including the Posts, Jobs, and Comments tabs, without the content being clipped off-screen.",
+        "summary": "Update the attachment rendering logic so image attachments display inline in the live feed (and anywhere else attachments are rendered) instead of falling back to a download/open link.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/CoachProfileDetailModal.tsx"
+          "frontend/src/components/PostAttachmentRenderer.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/CoachProfileDetailModal.tsx"
+          "frontend/src/components/PostAttachmentRenderer.tsx"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "Update the layout/overflow strategy in `frontend/src/components/CoachProfileDetailModal.tsx` so the scroll container has a deterministic height (e.g., via flex layout with a bounded parent, or via a direct `overflow-y-auto` body region), and ensure the chosen approach works with shadcn Dialog without modifying any files under `frontend/src/components/ui`.",
+        "summary": "Change non-image attachment behavior (PDF, video, and other file types) so the feed presents an external open/download link (new tab) rather than attempting to render the content inline.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/CoachProfileDetailModal.tsx",
-          "frontend/src/components/JobBoard.tsx"
+          "frontend/src/components/PostAttachmentRenderer.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/CoachProfileDetailModal.tsx"
+          "frontend/src/components/PostAttachmentRenderer.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
     "build-request.json",
+    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/CoachProfileDetailModal.tsx",
+    "frontend/src/components/PostAttachmentRenderer.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

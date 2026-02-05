@@ -1,11 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Restore reliable vertical scrolling in the coach profile detail modal so Posts, Jobs, and Comments content isn’t clipped when it exceeds the viewport.
+**Goal:** Fix attachment rendering so images display inline in the live feed (and all other places attachments are shown), while non-image files open via an external link.
 
 **Planned changes:**
-- Update `frontend/src/components/CoachProfileDetailModal.tsx` layout/overflow so the modal has a bounded height (e.g., `max-h-[90vh]`) and a dedicated `overflow-y-auto` scroll region for the tab content.
-- Ensure the modal scroll behavior works consistently on desktop (wheel/trackpad) and mobile (swipe), avoiding “stuck” scrolling caused by nested overflow/height issues.
-- Verify the change does not require edits to any `frontend/src/components/ui/*` files and does not break existing scrolling behavior in other dialogs (e.g., Job Board dialogs).
+- Update attachment rendering to detect image files by MIME type and, when missing/unknown, by filename extension (.jpg, .jpeg, .png, .gif, .webp) and render them inline using an `<img>` preview.
+- Change non-image attachment handling (PDF, video, and other types) to show an “Open”/“Download” action that opens the direct attachment URL in a new tab (`target="_blank"` with `rel="noopener noreferrer"`), without inline media previews.
+- Apply the updated behavior consistently anywhere `PostAttachmentRenderer` is used (e.g., SocialFeed posts, coach profile post lists, edit post modal previews).
 
-**User-visible outcome:** When viewing another coach’s profile, users can scroll through long Posts, Jobs, and Comments lists inside the modal without content being cut off.
+**User-visible outcome:** Image attachments appear directly in the feed as inline previews, while PDFs/videos/other files show an external open/download link that opens in a new browser tab.

@@ -1,58 +1,68 @@
 {
   "kind": "build_request",
-  "title": "Fix missing scrolling in coach profile detail modal (posts/jobs/comments overflow)",
+  "title": "Fix live feed attachments: render images inline and open non-image files via external link",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Fix the coach profile detail view so the user can scroll through content that exceeds the viewport height when viewing someone’s profile, including the Posts, Jobs, and Comments tabs, without the content being clipped off-screen.",
+      "text": "Update the attachment rendering logic so image attachments display inline in the live feed (and anywhere else attachments are rendered) instead of falling back to a download/open link.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-7",
+          "msg-11"
         ],
         "quotes": [
-          "it is still not allowing me to scroll when i view someones profile, posts, jobs, and comments that goes past the viewing screen"
+          "the live page now has a download link instead of the images that is posted. I want it to show the image posted on the live feed."
         ]
       },
       "acceptanceCriteria": [
-        "When opening another coach’s profile modal, the content area scrolls vertically with mouse wheel/trackpad on desktop and swipe on mobile.",
-        "In the Posts tab, a long list of posts can be fully scrolled from top to bottom inside the modal.",
-        "In the Jobs tab, a long list of jobs can be fully scrolled from top to bottom inside the modal.",
-        "In the Comments tab, a long list of comments can be fully scrolled from top to bottom inside the modal.",
-        "The modal header area (name/avatar/follow buttons) remains visible while scrolling the modal body (or, if it scrolls away by design, scrolling still works reliably and content is not clipped).",
-        "Scrolling does not get “stuck” due to nested overflow containers (i.e., no combination of `overflow-hidden` + missing height prevents scrolling)."
+        "When a post has an image attachment, the feed shows the actual image preview inline (using an <img> preview), not just a download/open link.",
+        "If an attachment has a missing/empty/unknown MIME type (e.g., application/octet-stream) but its filename extension indicates an image (e.g., .jpg, .jpeg, .png, .gif, .webp), it still renders inline as an image.",
+        "This behavior applies consistently anywhere PostAttachmentRenderer is used (e.g., SocialFeed posts, coach profile post lists, edit post modal previews)."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Update the layout/overflow strategy in `frontend/src/components/CoachProfileDetailModal.tsx` so the scroll container has a deterministic height (e.g., via flex layout with a bounded parent, or via a direct `overflow-y-auto` body region), and ensure the chosen approach works with shadcn Dialog without modifying any files under `frontend/src/components/ui`.",
+      "text": "Change non-image attachment behavior (PDF, video, and other file types) so the feed presents an external open/download link (new tab) rather than attempting to render the content inline.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-7",
+          "msg-11"
         ],
         "quotes": [
-          "it is still not allowing me to scroll when i view someones profile, posts, jobs, and comments that goes past the viewing screen"
+          "If someone posts a pdf, video, etc can it make it download to an external link so that the person on the xoroots app can video it?"
         ]
       },
       "acceptanceCriteria": [
-        "No edits are made to any `frontend/src/components/ui/*` files (they must be composed/used as-is).",
-        "The scrollable region is bounded (e.g., modal uses `max-h-[90vh]` and the body region scrolls within that bound) and does not rely on an element with `height: 100%` unless all parent heights are explicitly defined.",
-        "Regression check: the Job Board dialogs that already use `max-h-[90vh] overflow-y-auto` continue to scroll correctly."
+        "If an attachment is a PDF, video, or any non-image type, the UI shows a clear action (e.g., “Open” / “Download”) that opens the attachment URL in a new browser tab/window (target=\"_blank\" with rel=\"noopener noreferrer\").",
+        "Non-image attachments do not render as inline media players/previews in the feed (e.g., no embedded <video> preview in the post card).",
+        "Clicking the action uses the direct blob URL (attachment.blob.getDirectURL()) so the file can be viewed/downloaded externally."
       ]
     }
   ],
   "constraints": [
-    "Do not edit any files under `frontend/src/components/ui` (immutable).",
-    "Frontend user-facing text must be English."
+    "Do not modify files under frontend/src/components/ui (read-only Shadcn components).",
+    "Do not modify frontend/src/hooks/useInternetIdentity.ts / .tsx, frontend/src/hooks/useActor.ts, or frontend/src/main.tsx (immutable paths).",
+    "Keep the backend as a single Motoko actor; no additional backend services or external storage integrations."
   ],
   "nonGoals": [
-    "Changing backend logic, schemas, or APIs.",
-    "Redesigning the entire profile modal UI beyond what is necessary to restore scrolling behavior."
+    "Implementing an in-app document/video viewer inside the feed beyond the requested external open/download behavior.",
+    "Adding support for third-party storage providers or CDN links."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }
