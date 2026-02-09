@@ -1,37 +1,63 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix attachment rendering in live feed: inline images, external links for non-images",
+  "title": "Inline video and PDF viewers for post attachments",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Ensure image attachments render inline everywhere attachments are shown, including when MIME type is missing/unknown but filename indicates an image.",
+      "summary": "Render video attachments as responsive inline players using the attachment direct blob URL.",
       "acceptanceCriteria": [
-        "When a post has an image attachment, the feed shows the actual image preview inline (using an <img> preview), not just a download/open link.",
-        "If an attachment has a missing/empty/unknown MIME type (e.g., application/octet-stream) but its filename extension indicates an image (e.g., .jpg, .jpeg, .png, .gif, .webp), it still renders inline as an image.",
-        "This behavior applies consistently anywhere PostAttachmentRenderer is used (e.g., SocialFeed posts, coach profile post lists, edit post modal previews)."
+        "In the social feed, attachments detected as video (by mimeType starting with `video/` or filename extension match) render a playable inline `<video>` element with controls.",
+        "The inline video player uses `attachment.blob.getDirectURL()` as its source and does not require downloading the file first.",
+        "The inline video player layout is responsive and fits within the existing attachment grid without breaking card layout."
       ],
       "file_operations": [
         {
+          "path": "frontend/src/utils/attachmentTypes.ts",
+          "operation": "create",
+          "description": "Add shared attachment type detection helpers (video/image/pdf by mimeType and filename extension) so video rendering rules are consistent across the app."
+        },
+        {
           "path": "frontend/src/components/PostAttachmentRenderer.tsx",
           "operation": "modify",
-          "description": "Update image detection to render inline <img> when either (a) MIME type starts with image/ OR (b) MIME type is missing/unknown and fileName extension indicates an image (.jpg/.jpeg/.png/.gif/.webp). Keep using attachment.blob.getDirectURL() as the src so all current usage sites (SocialFeed, CoachProfileDetailModal, EditPostModal) inherit the behavior. Verify the component's usage instructions before implementing."
+          "description": "Update video handling to render an inline HTML <video> player (controls enabled) sourced from `attachment.blob.getDirectURL()` (blob-storage ExternalBlob direct URL streaming/caching). Verify the component's usage instructions before implementing. Ensure the layout is responsive within the existing attachment grid (e.g., contain sizing, rounded corners, and not overflowing the card)."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Render PDFs, videos, and any non-image attachments as an external open/download link (new tab) and avoid inline previews/players in the feed.",
+      "summary": "Render PDF attachments inline using the attachment direct blob URL with a fallback open-in-new-tab action.",
       "acceptanceCriteria": [
-        "If an attachment is a PDF, video, or any non-image type, the UI shows a clear action (e.g., “Open” / “Download”) that opens the attachment URL in a new browser tab/window (target=\"_blank\" with rel=\"noopener noreferrer\").",
-        "Non-image attachments do not render as inline media players/previews in the feed (e.g., no embedded <video> preview in the post card).",
-        "Clicking the action uses the direct blob URL (attachment.blob.getDirectURL()) so the file can be viewed/downloaded externally."
+        "In the social feed, attachments detected as PDF (mimeType `application/pdf` or filename ending in `.pdf`) render an inline PDF viewer (e.g., `<iframe>`/`<embed>`) using `attachment.blob.getDirectURL()` as the source.",
+        "PDFs are viewable in-place without requiring an explicit download action.",
+        "If inline PDF viewing fails to load (e.g., browser restriction), the UI still provides a clear fallback link/button to open the PDF in a new tab."
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/PostAttachmentRenderer.tsx",
           "operation": "modify",
-          "description": "Remove inline rendering for non-image types (including current <video> and PDF-specific preview UI) and replace with a consistent file card that provides a clear “Open”/“Download” action implemented as an <a> pointing to attachment.blob.getDirectURL(), opened in a new tab (target=\"_blank\" with rel=\"noopener noreferrer\"). Ensure the action is used for PDFs, videos, and all other non-image attachments. Verify the component's usage instructions before implementing."
+          "description": "Update PDF handling to render an inline PDF viewer (<iframe> or <embed>) using `attachment.blob.getDirectURL()` (blob-storage ExternalBlob direct URL). Verify the component's usage instructions before implementing. Add a clear fallback control that opens the PDF in a new tab, and implement basic load-failure detection/state so the fallback is shown when inline viewing is blocked."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Use the same inline viewer behavior everywhere attachments are rendered, including EditPostModal previews, while preserving existing image and fallback behaviors.",
+      "acceptanceCriteria": [
+        "In `EditPostModal`, existing attachments that are videos or PDFs use the same inline viewer behavior as in the feed.",
+        "Image attachments continue to render inline as images as they do currently.",
+        "Non-video/non-PDF/non-image attachments continue to render using the existing fallback download/open link UI."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/PostAttachmentRenderer.tsx",
+          "operation": "modify",
+          "description": "Refactor to rely on the shared attachment type detection utilities and ensure rendering branches remain: image => <img>, video => inline <video>, pdf => inline viewer with fallback, other => existing open/download UI. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/EditPostModal.tsx",
+          "operation": "modify",
+          "description": "Ensure attachment preview containers remain compatible with the updated inline viewers (video/PDF) by adjusting preview sizing classes as needed so inline viewers render cleanly in the modal grid without overflow, while keeping images and other file fallbacks unchanged."
         }
       ]
     }

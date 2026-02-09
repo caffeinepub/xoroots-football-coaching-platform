@@ -1,11 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Fix attachment rendering so images display inline in the live feed (and all other places attachments are shown), while non-image files open via an external link.
+**Goal:** Render post attachments inline with built-in viewers for videos and PDFs, using direct blob URLs.
 
 **Planned changes:**
-- Update attachment rendering to detect image files by MIME type and, when missing/unknown, by filename extension (.jpg, .jpeg, .png, .gif, .webp) and render them inline using an `<img>` preview.
-- Change non-image attachment handling (PDF, video, and other types) to show an “Open”/“Download” action that opens the direct attachment URL in a new tab (`target="_blank"` with `rel="noopener noreferrer"`), without inline media previews.
-- Apply the updated behavior consistently anywhere `PostAttachmentRenderer` is used (e.g., SocialFeed posts, coach profile post lists, edit post modal previews).
+- Update attachment rendering in the social feed so video attachments display as a responsive inline `<video>` player with controls, sourced from `attachment.blob.getDirectURL()`.
+- Update attachment rendering in the social feed so PDF attachments display inline (e.g., via `<iframe>`/`<embed>`) sourced from `attachment.blob.getDirectURL()`, with a fallback action to open in a new tab if inline viewing fails.
+- Apply the same inline viewer behavior anywhere attachments are previewed/rendered (including `EditPostModal`), while keeping current behavior for images and other file types.
 
-**User-visible outcome:** Image attachments appear directly in the feed as inline previews, while PDFs/videos/other files show an external open/download link that opens in a new browser tab.
+**User-visible outcome:** Videos and PDFs attached to posts can be viewed directly inside the feed and edit-post previews, without downloading first; other attachment types continue to show the existing link/download UI.

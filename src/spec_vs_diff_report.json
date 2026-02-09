@@ -1,23 +1,87 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T15:01:01.715Z",
-  "summary": "PostAttachmentRenderer was updated to render image attachments inline via <img> (including when MIME is application/octet-stream but filename looks like an image) and to present non-image attachments (video, PDF, and fallback types) as external links opening in a new tab via the direct blob URL. One part of the fallback link is truncated, so compliance for target/rel in that specific branch can’t be fully verified from the provided diff.",
+  "generatedAt": "2026-02-09T14:26:16.179Z",
+  "summary": "A shared PostAttachmentRenderer and attachment type utilities were added to support inline image/video/PDF rendering using direct blob URLs, with a PDF fallback to open in a new tab. However, the diff evidence is insufficient to confirm these inline viewers are actually wired into the social feed attachment UI and all other attachment render locations (including the EditPostModal previews). The diff summary also indicates multiple unrelated frontend changes (auth/session, UI pages, admin badges, styling, image cropper, dependencies) that were not requested and may violate stated constraints (including edits to immutable hook files).",
   "missing_requirements": [
     {
-      "id": "REQ-2",
-      "requirement": "For any non-image type, the UI shows an external open/download link that opens in a new tab/window with target=\"_blank\" and rel=\"noopener noreferrer\".",
-      "reason": "The fallback (unknown file types) anchor tag is truncated in the diff right after `target=\"_blank`, so it’s not possible to confirm from the provided evidence that the full target/rel attributes are correctly present for that branch.",
+      "id": "REQ-1",
+      "requirement": "In the social feed, video attachments should render as an inline playable <video> (detected by video/* mimeType or filename extension) using attachment.blob.getDirectURL() and fitting the attachment grid.",
+      "reason": "While PostAttachmentRenderer implements inline <video> with <source src={attachment.blob.getDirectURL()}>, the diff summary does not show (or provide non-truncated evidence of) the social feed attachment UI being updated to use this renderer in place of the previous external link UI.",
       "evidence": [
-        "frontend/src/components/PostAttachmentRenderer.tsx (truncated at fallback <a href={url} target=\"_blank ...)"
+        "frontend/src/components/PostAttachmentRenderer.tsx",
+        "frontend-file-summaries.txt (mentions SocialFeed changes but provides no code evidence)"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "requirement": "In the social feed, PDF attachments should render inline (iframe/embed) using attachment.blob.getDirectURL(), with a clear fallback to open in a new tab if inline viewing fails.",
+      "reason": "PostAttachmentRenderer adds an iframe-based PDF viewer with an 'Open in New Tab' link and an error-state fallback UI, but the diff summary does not show (or provide non-truncated evidence of) the social feed attachment UI actually using this renderer for PDFs.",
+      "evidence": [
+        "frontend/src/components/PostAttachmentRenderer.tsx",
+        "frontend-file-summaries.txt (mentions SocialFeed changes but provides no code evidence)"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "requirement": "Inline viewers should be used consistently anywhere attachments are rendered, including EditPostModal attachment previews; images remain inline; non-video/non-PDF/non-image keep fallback link UI.",
+      "reason": "EditPostModal imports PostAttachmentRenderer, but the provided file content is truncated before showing how existing attachments are rendered in the modal, so consistent usage across preview locations cannot be verified from the diff summary alone.",
+      "evidence": [
+        "frontend/src/components/EditPostModal.tsx (truncated)",
+        "frontend/src/components/PostAttachmentRenderer.tsx"
       ]
     }
   ],
-  "hallucinated_features": [],
-  "confidence": 0.7,
+  "hallucinated_features": [
+    {
+      "description": "Authentication/session restoration logic changes (e.g., streamlined profile loading, session confirmation gating, retry logic, IndexedDB restoration, timeouts).",
+      "reason": "Not requested by the BuildRequest and also conflicts with the constraint to not edit immutable files like frontend/src/hooks/useInternetIdentity.ts and frontend/src/hooks/useActor.ts.",
+      "evidence": [
+        "frontend-file-summaries.txt (entries for frontend/src/App.tsx, frontend/src/hooks/useActor.ts, frontend/src/hooks/useInternetIdentity.ts)"
+      ]
+    },
+    {
+      "description": "Admin badge display and admin-related UI/actions across header, social feed, directory, and profile (including admin-only delete account buttons).",
+      "reason": "Not requested; the BuildRequest is scoped to UI viewing of attachments only.",
+      "evidence": [
+        "frontend-file-summaries.txt (entries for frontend/src/components/Header.tsx, frontend/src/components/SocialFeed.tsx, frontend/src/components/CoachDirectory.tsx, frontend/src/components/MyProfile.tsx)"
+      ]
+    },
+    {
+      "description": "New marketing landing page and dashboard navigation/styling changes unrelated to attachment rendering.",
+      "reason": "Not requested; out of scope.",
+      "evidence": [
+        "frontend-file-summaries.txt (entries for frontend/src/pages/LandingPage.tsx, frontend/src/pages/Dashboard.tsx)"
+      ]
+    },
+    {
+      "description": "MessagingHub described as having a real-time chat view.",
+      "reason": "Not requested and potentially conflicts with the non-goal of adding WebSocket-based playback features (even though this is chat, it is still out-of-scope functionality).",
+      "evidence": [
+        "frontend-file-summaries.txt (entry for frontend/src/components/MessagingHub.tsx)"
+      ]
+    },
+    {
+      "description": "Global styling overhaul (OKLCH color system / branding) and broad dark mode styling changes across multiple pages.",
+      "reason": "Not requested; out of scope for attachment viewer rebuild.",
+      "evidence": [
+        "frontend-file-summaries.txt (entries for frontend/src/index.css, frontend/src/components/ProfileSetupModal.tsx, frontend/src/components/JobBoard.tsx, frontend/src/components/MyProfile.tsx)"
+      ]
+    },
+    {
+      "description": "Image cropping feature additions, including a custom ImageCropper component and adding react-easy-crop dependency.",
+      "reason": "Not requested; out of scope for attachment viewing only.",
+      "evidence": [
+        "frontend-file-summaries.txt (entries for frontend/src/components/ImageCropper.tsx, frontend/package.json)"
+      ]
+    }
+  ],
+  "confidence": 0.62,
   "changed_files": [
     "frontend-file-summaries.txt",
+    "frontend/src/components/EditPostModal.tsx",
     "frontend/src/components/PostAttachmentRenderer.tsx",
+    "frontend/src/utils/attachmentTypes.ts",
     "project_state.json"
   ]
 }

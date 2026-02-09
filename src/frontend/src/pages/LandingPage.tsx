@@ -62,7 +62,7 @@ export default function LandingPage() {
         </div>
         <div className="absolute inset-0 -z-10 opacity-20">
           <img
-            src="/assets/generated/hero-background.dim_1200x600.jpg"
+            src="/assets/20260205_0932_Image Generation_remix_01kgq6w5tfe2tbg4ztq3wvmcbv.png"
             alt=""
             className="h-full w-full object-cover"
           />

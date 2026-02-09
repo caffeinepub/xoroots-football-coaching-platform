@@ -1,18 +1,31 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T15:01:01.717Z",
+  "generatedAt": "2026-02-09T14:26:16.182Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 2,
+    "total": 3,
+    "implemented": 3,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Update the attachment rendering logic so image attachments display inline in the live feed (and anywhere else attachments are rendered) instead of falling back to a download/open link.",
+        "summary": "Update the post attachment UI so video attachments render as an inline player (instead of an external link), using the attachment’s direct blob URL.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/utils/attachmentTypes.ts",
+          "frontend/src/components/PostAttachmentRenderer.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/utils/attachmentTypes.ts",
+          "frontend/src/components/PostAttachmentRenderer.tsx"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Update the post attachment UI so PDF attachments render inline in-place (instead of an external link), using the attachment’s direct blob URL.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/components/PostAttachmentRenderer.tsx"
@@ -22,14 +35,16 @@
         ]
       },
       {
-        "id": "REQ-2",
-        "summary": "Change non-image attachment behavior (PDF, video, and other file types) so the feed presents an external open/download link (new tab) rather than attempting to render the content inline.",
+        "id": "REQ-3",
+        "summary": "Ensure inline viewers are used consistently anywhere post attachments are rendered (including the edit-post modal attachment previews).",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/PostAttachmentRenderer.tsx"
+          "frontend/src/components/PostAttachmentRenderer.tsx",
+          "frontend/src/components/EditPostModal.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/PostAttachmentRenderer.tsx"
+          "frontend/src/components/PostAttachmentRenderer.tsx",
+          "frontend/src/components/EditPostModal.tsx"
         ]
       }
     ]
@@ -40,7 +55,9 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
+    "frontend/src/components/EditPostModal.tsx",
     "frontend/src/components/PostAttachmentRenderer.tsx",
+    "frontend/src/utils/attachmentTypes.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

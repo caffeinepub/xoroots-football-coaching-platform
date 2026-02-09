@@ -2,10 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-attachment-rendering-logic-so-image-attachments-display-inline-in-the-live-feed-and-anywhere-else-attachments-are-rendered-instead-of-falling-back-to-a-download-open-link",
-      "featureTitle": "Update the attachment rendering logic so image attachments display inline in the live feed (and anywhere else attachments are rendered) instead of falling back to a download/open link.",
+      "featureId": "feature-update-the-post-attachment-ui-so-video-attachments-render-as-an-inline-player-instead-of-an-external-link-using-the-attachment-s-direct-blob-url",
+      "featureTitle": "Update the post attachment UI so video attachments render as an inline player (instead of an external link), using the attachment’s direct blob URL.",
       "files": [
-        "frontend/src/components/PostAttachmentRenderer.tsx"
+        "frontend/src/components/PostAttachmentRenderer.tsx",
+        "frontend/src/utils/attachmentTypes.ts"
       ],
       "components": [
         "authorization@4.0.0",
@@ -22,8 +23,8 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-change-non-image-attachment-behavior-pdf-video-and-other-file-types-so-the-feed-presents-an-external-open-download-link-new-tab-rather-than-attempting-to-render-the-content-inline",
-      "featureTitle": "Change non-image attachment behavior (PDF, video, and other file types) so the feed presents an external open/download link (new tab) rather than attempting to render the content inline.",
+      "featureId": "feature-update-the-post-attachment-ui-so-pdf-attachments-render-inline-in-place-instead-of-an-external-link-using-the-attachment-s-direct-blob-url",
+      "featureTitle": "Update the post attachment UI so PDF attachments render inline in-place (instead of an external link), using the attachment’s direct blob URL.",
       "files": [
         "frontend/src/components/PostAttachmentRenderer.tsx"
       ],
@@ -38,6 +39,27 @@
       ],
       "testIds": [
         "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-ensure-inline-viewers-are-used-consistently-anywhere-post-attachments-are-rendered-including-the-edit-post-modal-attachment-previews",
+      "featureTitle": "Ensure inline viewers are used consistently anywhere post attachments are rendered (including the edit-post modal attachment previews).",
+      "files": [
+        "frontend/src/components/EditPostModal.tsx",
+        "frontend/src/components/PostAttachmentRenderer.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
       ],
       "confidence": "high"
     }

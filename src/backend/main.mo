@@ -9,12 +9,13 @@ import Time "mo:core/Time";
 import Order "mo:core/Order";
 import Runtime "mo:core/Runtime";
 
+
 import MixinAuthorization "authorization/MixinAuthorization";
 import Storage "blob-storage/Storage";
 import MixinStorage "blob-storage/Mixin";
 import AccessControl "authorization/access-control";
 
-
+// Data persistence via migration
 
 actor {
   module Post {
@@ -1054,3 +1055,4 @@ actor {
     };
   };
 };
+

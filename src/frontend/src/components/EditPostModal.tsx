@@ -85,7 +85,7 @@ export default function EditPostModal({ post, isOpen, onClose }: EditPostModalPr
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl bg-white dark:bg-gray-900 text-foreground dark:text-white backdrop-blur-none border-2 border-border shadow-2xl">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 text-foreground dark:text-white backdrop-blur-none border-2 border-border shadow-2xl">
         <DialogHeader>
           <DialogTitle className="text-foreground dark:text-white">Edit Post</DialogTitle>
         </DialogHeader>
@@ -105,12 +105,12 @@ export default function EditPostModal({ post, isOpen, onClose }: EditPostModalPr
           {existingAttachments.length > 0 && (
             <div>
               <Label className="text-sm font-medium mb-2 block text-foreground dark:text-white">Current Attachments</Label>
-              <div className="grid gap-2 sm:grid-cols-2">
+              <div className="grid gap-2">
                 {existingAttachments.map((attachment, idx) => (
                   <div key={idx} className="relative">
                     <PostAttachmentRenderer
                       attachment={attachment}
-                      className="h-32"
+                      className="max-h-64"
                     />
                     <Button
                       variant="destructive"

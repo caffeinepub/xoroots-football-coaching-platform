@@ -1,28 +1,36 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "New project",
+  "summary": "App with a live feed and post attachments (videos/PDFs); working on improving attachment viewing via inline viewers.",
   "architectural_notes": [
-    "Attachment renderer should detect file type via MIME type/extension and choose inline <img> for images vs external download/open link for other files"
+    "Support inline media rendering in feed/posts: embedded video player and embedded PDF viewer (with optional full-screen view)."
   ],
   "known_issues": [
-    "Live feed currently displays download links instead of rendering posted images inline"
+    "Images previously generated/paid for are not appearing on the live feed (especially content created before the persistence update)."
   ],
   "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-update-the-attachment-rendering-logic-so-image-attachments-display-inline-in-the-live-feed-and-anywhere-else-attachments-are-rendered-instead-of-falling-back-to-a-download-open-link",
-      "title": "Update the attachment rendering logic so image attachments display inline in the live feed (and anywhere else attachments are rendered) instead of falling back to a download/open link.",
+      "id": "feature-update-the-post-attachment-ui-so-video-attachments-render-as-an-inline-player-instead-of-an-external-link-using-the-attachment-s-direct-blob-url",
+      "title": "Update the post attachment UI so video attachments render as an inline player (instead of an external link), using the attachment’s direct blob URL.",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-change-non-image-attachment-behavior-pdf-video-and-other-file-types-so-the-feed-presents-an-external-open-download-link-new-tab-rather-than-attempting-to-render-the-content-inline",
-      "title": "Change non-image attachment behavior (PDF, video, and other file types) so the feed presents an external open/download link (new tab) rather than attempting to render the content inline.",
+      "id": "feature-update-the-post-attachment-ui-so-pdf-attachments-render-inline-in-place-instead-of-an-external-link-using-the-attachment-s-direct-blob-url",
+      "title": "Update the post attachment UI so PDF attachments render inline in-place (instead of an external link), using the attachment’s direct blob URL.",
       "reqIds": [
         "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-inline-viewers-are-used-consistently-anywhere-post-attachments-are-rendered-including-the-edit-post-modal-attachment-previews",
+      "title": "Ensure inline viewers are used consistently anywhere post attachments are rendered (including the edit-post modal attachment previews).",
+      "reqIds": [
+        "REQ-3"
       ],
       "version": 1
     }
@@ -30,18 +38,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Render image attachments inline in live feed instead of showing a download link",
+      "summary": "Add inline viewers for videos and PDFs attached to posts (inline video playback + inline PDF viewing without download).",
       "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "For non-image attachments (PDF/video/etc), show an external download/open link (new tab) from the live feed",
-      "reqIds": [],
-      "status": "pending"
+      "status": "in_progress"
     }
   ],
-  "projectName": "Fix live feed attachments: render images inline and open non-image files via external link",
+  "projectName": "Rebuild attachment rendering with inline video and PDF viewers",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }
