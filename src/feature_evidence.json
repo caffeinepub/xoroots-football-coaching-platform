@@ -2,11 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-post-attachment-ui-so-video-attachments-render-as-an-inline-player-instead-of-an-external-link-using-the-attachment-s-direct-blob-url",
-      "featureTitle": "Update the post attachment UI so video attachments render as an inline player (instead of an external link), using the attachment’s direct blob URL.",
+      "featureId": "feature-ensure-the-authenticated-app-header-displays-the-xoroots-logo-anchored-in-the-top-left-of-the-viewport-on-all-logged-in-pages-i-e-wherever-header-is-rendered-with-consistent-sizing-and-spacing-so-it-is-visibly-top-left-not-centered-across-breakpoints",
+      "featureTitle": "Ensure the authenticated app header displays the XOROOTS logo anchored in the top-left of the viewport on all logged-in pages (i.e., wherever <Header /> is rendered), with consistent sizing and spacing so it is visibly top-left (not centered) across breakpoints.",
       "files": [
-        "frontend/src/components/PostAttachmentRenderer.tsx",
-        "frontend/src/utils/attachmentTypes.ts"
+        "frontend/src/components/Header.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -23,10 +22,12 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-the-post-attachment-ui-so-pdf-attachments-render-inline-in-place-instead-of-an-external-link-using-the-attachment-s-direct-blob-url",
-      "featureTitle": "Update the post attachment UI so PDF attachments render inline in-place (instead of an external link), using the attachment’s direct blob URL.",
+      "featureId": "feature-add-a-transparent-continuously-scrolling-background-using-the-xoroots-logo-on-authenticated-logged-in-pages-only-behind-the-dashboard-content-without-impacting-readability-or-blocking-interactions",
+      "featureTitle": "Add a transparent, continuously scrolling background using the XOROOTS logo on authenticated (logged-in) pages only, behind the Dashboard content, without impacting readability or blocking interactions.",
       "files": [
-        "frontend/src/components/PostAttachmentRenderer.tsx"
+        "frontend/src/App.tsx",
+        "frontend/src/components/AuthenticatedScrollingLogoBackground.tsx",
+        "frontend/src/index.css"
       ],
       "components": [
         "authorization@4.0.0",
@@ -43,11 +44,10 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-ensure-inline-viewers-are-used-consistently-anywhere-post-attachments-are-rendered-including-the-edit-post-modal-attachment-previews",
-      "featureTitle": "Ensure inline viewers are used consistently anywhere post attachments are rendered (including the edit-post modal attachment previews).",
+      "featureId": "feature-use-the-user-provided-xoroots-logo-asset-s-for-the-header-logo-and-the-authenticated-scrolling-background-preferably-via-the-centralized-branding-logo-src-reference-and-keep-delivery-as-static-frontend-assets-no-backend-proxying",
+      "featureTitle": "Use the user-provided XOROOTS logo asset(s) for the header logo and the authenticated scrolling background (preferably via the centralized BRANDING.logo.src reference) and keep delivery as static frontend assets (no backend proxying).",
       "files": [
-        "frontend/src/components/EditPostModal.tsx",
-        "frontend/src/components/PostAttachmentRenderer.tsx"
+        "frontend/src/components/AuthenticatedScrollingLogoBackground.tsx"
       ],
       "components": [
         "authorization@4.0.0",

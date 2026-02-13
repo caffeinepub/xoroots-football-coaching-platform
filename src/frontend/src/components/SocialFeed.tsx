@@ -17,6 +17,7 @@ import AdminBadge from './AdminBadge';
 import CoachProfileDetailModal from './CoachProfileDetailModal';
 import EditPostModal from './EditPostModal';
 import PostAttachmentRenderer from './PostAttachmentRenderer';
+import { useImageBlobUrl } from '../utils/imageBlobUrl';
 
 type SortOption = 'newest' | 'mostLiked' | 'mostCommented' | 'notViewed';
 
@@ -205,7 +206,7 @@ export default function SocialFeed() {
             <div className="flex items-center gap-2">
               <Input
                 type="file"
-                accept="image/*,video/*,application/pdf"
+                accept="image/*,video/*,application/pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.csv"
                 multiple
                 onChange={handleFileChange}
                 className="hidden"
@@ -377,6 +378,8 @@ function PostCard({
   profiles,
   currentUserPrincipal,
 }: PostCardProps) {
+  const authorPhotoUrl = useImageBlobUrl(authorProfile?.photo);
+
   const getProfileByPrincipal = (principalId: string) => {
     return profiles.find((p) => p.userId.toString() === principalId);
   };
@@ -392,8 +395,8 @@ function PostCard({
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <Avatar>
-              {authorProfile?.photo && (
-                <AvatarImage src={authorProfile.photo.getDirectURL()} alt={authorProfile.name} />
+              {authorPhotoUrl.url && (
+                <AvatarImage src={authorPhotoUrl.url} alt={authorProfile?.name} />
               )}
               <AvatarFallback>
                 {authorProfile?.name.charAt(0).toUpperCase() || 'C'}
@@ -468,58 +471,22 @@ function PostCard({
               const hasLikedComment = comment.likes.some((p) => p.toString() === currentUserPrincipal);
               
               return (
-                <div key={comment.id} className="flex gap-3">
-                  <Avatar className="h-8 w-8">
-                    {commentAuthor?.photo && (
-                      <AvatarImage src={commentAuthor.photo.getDirectURL()} alt={commentAuthor.name} />
-                    )}
-                    <AvatarFallback>
-                      {commentAuthor?.name.charAt(0).toUpperCase() || 'C'}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1">
-                    <div className="rounded-lg bg-muted p-3">
-                      <div className="flex items-center gap-2 mb-1">
-                        <button
-                          onClick={() => onUsernameClick(comment.author.toString())}
-                          className="text-sm font-semibold hover:underline"
-                        >
-                          {commentAuthor?.name || 'Coach'}
-                        </button>
-                        {commentIsAdmin && <AdminBadge className="text-xs" />}
-                      </div>
-                      <p className="text-sm">{comment.content}</p>
-                    </div>
-                    <div className="flex items-center gap-2 mt-1 ml-3">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className={`h-6 px-2 text-xs ${hasLikedComment ? 'text-red-500' : ''}`}
-                        onClick={() => onToggleLikeComment(post.id, comment.id)}
-                      >
-                        <Heart className={`mr-1 h-3 w-3 ${hasLikedComment ? 'fill-current' : ''}`} />
-                        {comment.likes.length > 0 && comment.likes.length}
-                      </Button>
-                      {isCommentAuthor && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-6 px-2 text-xs text-destructive hover:text-destructive"
-                          onClick={() => onDeleteComment(post.id, comment.id)}
-                        >
-                          <Trash2 className="mr-1 h-3 w-3" />
-                          Delete
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                <CommentCard
+                  key={comment.id}
+                  comment={comment}
+                  commentAuthor={commentAuthor}
+                  commentIsAdmin={commentIsAdmin}
+                  isCommentAuthor={isCommentAuthor}
+                  hasLikedComment={hasLikedComment}
+                  onToggleLike={() => onToggleLikeComment(post.id, comment.id)}
+                  onDelete={() => onDeleteComment(post.id, comment.id)}
+                />
               );
             })}
           </div>
         )}
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 border-t pt-4">
           <Input
             placeholder="Write a comment..."
             value={commentInput}
@@ -537,5 +504,66 @@ function PostCard({
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+interface CommentCardProps {
+  comment: Comment;
+  commentAuthor: any;
+  commentIsAdmin: boolean;
+  isCommentAuthor: boolean;
+  hasLikedComment: boolean;
+  onToggleLike: () => void;
+  onDelete: () => void;
+}
+
+function CommentCard({
+  comment,
+  commentAuthor,
+  commentIsAdmin,
+  isCommentAuthor,
+  hasLikedComment,
+  onToggleLike,
+  onDelete,
+}: CommentCardProps) {
+  const commentPhotoUrl = useImageBlobUrl(commentAuthor?.photo);
+
+  return (
+    <div className="flex gap-3">
+      <Avatar className="h-8 w-8">
+        {commentPhotoUrl.url && (
+          <AvatarImage src={commentPhotoUrl.url} alt={commentAuthor?.name} />
+        )}
+        <AvatarFallback>
+          {commentAuthor?.name.charAt(0).toUpperCase() || 'C'}
+        </AvatarFallback>
+      </Avatar>
+      <div className="flex-1 space-y-1">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-semibold">{commentAuthor?.name || 'Coach'}</span>
+            {commentIsAdmin && <AdminBadge />}
+            <span className="text-xs text-muted-foreground">
+              {formatDistanceToNow(Number(comment.timestamp) / 1000000, { addSuffix: true })}
+            </span>
+          </div>
+          {isCommentAuthor && (
+            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onDelete}>
+              <Trash2 className="h-3 w-3" />
+            </Button>
+          )}
+        </div>
+        <p className="text-sm">{comment.content}</p>
+        <Button
+          variant="ghost"
+          size="sm"
+          className={`h-6 px-2 text-xs ${hasLikedComment ? 'text-red-500' : ''}`}
+          onClick={onToggleLike}
+        >
+          <Heart className={`mr-1 h-3 w-3 ${hasLikedComment ? 'fill-current' : ''}`} />
+          {comment.likes.length > 0 && comment.likes.length}
+        </Button>
+      </div>
+    </div>
   );
 }

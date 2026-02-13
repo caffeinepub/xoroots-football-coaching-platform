@@ -131,7 +131,7 @@ export default function EditPostModal({ post, isOpen, onClose }: EditPostModalPr
             <div className="flex items-center gap-2">
               <Input
                 type="file"
-                accept="image/*,video/*,application/pdf"
+                accept="image/*,video/*,application/pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.csv"
                 multiple
                 onChange={handleFileChange}
                 className="hidden"

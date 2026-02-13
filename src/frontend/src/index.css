@@ -4,58 +4,58 @@
 
 @layer base {
   :root {
-    --background: oklch(98% 0.01 120);
-    --foreground: oklch(20% 0.02 120);
+    --background: oklch(98% 0.005 120);
+    --foreground: oklch(15% 0.01 120);
     --card: oklch(100% 0 0);
-    --card-foreground: oklch(20% 0.02 120);
+    --card-foreground: oklch(15% 0.01 120);
     --popover: oklch(100% 0 0);
-    --popover-foreground: oklch(20% 0.02 120);
-    --primary: oklch(55% 0.18 165);
-    --primary-foreground: oklch(98% 0.01 165);
-    --secondary: oklch(92% 0.02 120);
-    --secondary-foreground: oklch(20% 0.02 120);
-    --muted: oklch(94% 0.01 120);
-    --muted-foreground: oklch(45% 0.02 120);
-    --accent: oklch(92% 0.02 120);
-    --accent-foreground: oklch(20% 0.02 120);
+    --popover-foreground: oklch(15% 0.01 120);
+    --primary: oklch(55% 0.20 155);
+    --primary-foreground: oklch(98% 0.005 155);
+    --secondary: oklch(92% 0.015 120);
+    --secondary-foreground: oklch(15% 0.01 120);
+    --muted: oklch(95% 0.01 120);
+    --muted-foreground: oklch(45% 0.015 120);
+    --accent: oklch(92% 0.015 120);
+    --accent-foreground: oklch(15% 0.01 120);
     --destructive: oklch(55% 0.22 25);
-    --destructive-foreground: oklch(98% 0.01 25);
-    --border: oklch(88% 0.02 120);
-    --input: oklch(88% 0.02 120);
-    --ring: oklch(55% 0.18 165);
-    --radius: 0.5rem;
-    --chart-1: oklch(60% 0.18 165);
-    --chart-2: oklch(70% 0.15 140);
-    --chart-3: oklch(65% 0.16 180);
-    --chart-4: oklch(75% 0.12 150);
-    --chart-5: oklch(55% 0.20 170);
+    --destructive-foreground: oklch(98% 0.005 25);
+    --border: oklch(88% 0.015 120);
+    --input: oklch(88% 0.015 120);
+    --ring: oklch(55% 0.20 155);
+    --radius: 0.75rem;
+    --chart-1: oklch(60% 0.20 155);
+    --chart-2: oklch(70% 0.18 140);
+    --chart-3: oklch(65% 0.19 165);
+    --chart-4: oklch(75% 0.15 150);
+    --chart-5: oklch(55% 0.22 160);
   }
 
   .dark {
-    --background: oklch(15% 0.02 120);
-    --foreground: oklch(95% 0.01 120);
-    --card: oklch(18% 0.02 120);
-    --card-foreground: oklch(95% 0.01 120);
-    --popover: oklch(18% 0.02 120);
-    --popover-foreground: oklch(95% 0.01 120);
-    --primary: oklch(60% 0.18 165);
-    --primary-foreground: oklch(15% 0.02 165);
-    --secondary: oklch(25% 0.02 120);
-    --secondary-foreground: oklch(95% 0.01 120);
-    --muted: oklch(25% 0.02 120);
-    --muted-foreground: oklch(65% 0.02 120);
-    --accent: oklch(25% 0.02 120);
-    --accent-foreground: oklch(95% 0.01 120);
+    --background: oklch(12% 0.015 120);
+    --foreground: oklch(95% 0.005 120);
+    --card: oklch(15% 0.015 120);
+    --card-foreground: oklch(95% 0.005 120);
+    --popover: oklch(15% 0.015 120);
+    --popover-foreground: oklch(95% 0.005 120);
+    --primary: oklch(62% 0.20 155);
+    --primary-foreground: oklch(12% 0.015 155);
+    --secondary: oklch(22% 0.015 120);
+    --secondary-foreground: oklch(95% 0.005 120);
+    --muted: oklch(22% 0.015 120);
+    --muted-foreground: oklch(65% 0.015 120);
+    --accent: oklch(22% 0.015 120);
+    --accent-foreground: oklch(95% 0.005 120);
     --destructive: oklch(55% 0.22 25);
-    --destructive-foreground: oklch(98% 0.01 25);
-    --border: oklch(30% 0.02 120);
-    --input: oklch(30% 0.02 120);
-    --ring: oklch(60% 0.18 165);
-    --chart-1: oklch(60% 0.18 165);
-    --chart-2: oklch(70% 0.15 140);
-    --chart-3: oklch(65% 0.16 180);
-    --chart-4: oklch(75% 0.12 150);
-    --chart-5: oklch(55% 0.20 170);
+    --destructive-foreground: oklch(98% 0.005 25);
+    --border: oklch(28% 0.015 120);
+    --input: oklch(28% 0.015 120);
+    --ring: oklch(62% 0.20 155);
+    --chart-1: oklch(60% 0.20 155);
+    --chart-2: oklch(70% 0.18 140);
+    --chart-3: oklch(65% 0.19 165);
+    --chart-4: oklch(75% 0.15 150);
+    --chart-5: oklch(55% 0.22 160);
   }
 }
 
@@ -64,6 +64,48 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-extrabold tracking-tight;
+  }
+}
+
+/* Authenticated scrolling logo background */
+@keyframes scrollDiagonal {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-400px, -400px);
+  }
+}
+
+.authenticated-scrolling-logo-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.authenticated-scrolling-logo-background .logo-pattern {
+  position: absolute;
+  top: -400px;
+  left: -400px;
+  right: -400px;
+  bottom: -400px;
+  background-image: url('/assets/generated/xoroots-logo.dim_300x100.png');
+  background-size: 300px 100px;
+  background-repeat: repeat;
+  opacity: 0.03;
+  animation: scrollDiagonal 30s linear infinite;
+}
+
+.dark .authenticated-scrolling-logo-background .logo-pattern {
+  opacity: 0.05;
 }

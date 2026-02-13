@@ -9,7 +9,13 @@ export default {
     theme: {
         container: {
             center: true,
-            padding: '2rem',
+            padding: {
+                DEFAULT: '1rem',
+                sm: '2rem',
+                lg: '4rem',
+                xl: '5rem',
+                '2xl': '6rem',
+            },
             screens: {
                 '2xl': '1400px'
             }
@@ -70,10 +76,20 @@ export default {
             borderRadius: {
                 lg: 'var(--radius)',
                 md: 'calc(var(--radius) - 2px)',
-                sm: 'calc(var(--radius) - 4px)'
+                sm: 'calc(var(--radius) - 4px)',
+                xl: 'calc(var(--radius) + 4px)',
             },
             boxShadow: {
-                xs: '0 1px 2px 0 rgba(0,0,0,0.05)'
+                xs: '0 1px 2px 0 rgba(0,0,0,0.05)',
+                'inner-lg': 'inset 0 2px 4px 0 rgba(0,0,0,0.06)',
+            },
+            fontWeight: {
+                'extra-bold': '800',
+                'black': '900',
+            },
+            letterSpacing: {
+                'tighter': '-0.05em',
+                'extra-tight': '-0.075em',
             },
             keyframes: {
                 'accordion-down': {

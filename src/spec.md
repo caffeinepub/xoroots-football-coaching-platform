@@ -1,11 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Render post attachments inline with built-in viewers for videos and PDFs, using direct blob URLs.
+**Goal:** Update authenticated pages to consistently show the XOROOTS logo in the top-left header area and add a subtle, transparent, continuously scrolling XOROOTS logo watermark background behind dashboard content (authenticated-only).
 
 **Planned changes:**
-- Update attachment rendering in the social feed so video attachments display as a responsive inline `<video>` player with controls, sourced from `attachment.blob.getDirectURL()`.
-- Update attachment rendering in the social feed so PDF attachments display inline (e.g., via `<iframe>`/`<embed>`) sourced from `attachment.blob.getDirectURL()`, with a fallback action to open in a new tab if inline viewing fails.
-- Apply the same inline viewer behavior anywhere attachments are previewed/rendered (including `EditPostModal`), while keeping current behavior for images and other file types.
+- Ensure the shared authenticated `<Header />` layout anchors the existing `BrandLogo` to the far left of the header content area across mobile and desktop breakpoints (no centering shifts).
+- Implement an authenticated-only background layer behind dashboard content that repeats the XOROOTS logo with low opacity and continuously scrolls/loops seamlessly.
+- Wire both the header logo and the authenticated scrolling background to the same centralized logo source (e.g., `BRANDING.logo.src` used by `BrandLogo`) and serve it from static frontend assets.
 
-**User-visible outcome:** Videos and PDFs attached to posts can be viewed directly inside the feed and edit-post previews, without downloading first; other attachment types continue to show the existing link/download UI.
+**User-visible outcome:** When logged in, users see the XOROOTS logo fixed at the top-left in the header on all dashboard pages, and a subtle animated repeating XOROOTS watermark background behind the UI; when logged out, the landing page remains unchanged and has no scrolling watermark background.

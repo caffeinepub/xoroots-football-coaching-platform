@@ -1,34 +1,30 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "App with a live feed and post attachments (videos/PDFs); working on improving attachment viewing via inline viewers.",
-  "architectural_notes": [
-    "Support inline media rendering in feed/posts: embedded video player and embedded PDF viewer (with optional full-screen view)."
-  ],
-  "known_issues": [
-    "Images previously generated/paid for are not appearing on the live feed (especially content created before the persistence update)."
-  ],
-  "isFixRequest": true,
+  "summary": "App UI branding updates: place logo in top-left and add a transparent scrolling logo background on logged-in pages.",
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-update-the-post-attachment-ui-so-video-attachments-render-as-an-inline-player-instead-of-an-external-link-using-the-attachment-s-direct-blob-url",
-      "title": "Update the post attachment UI so video attachments render as an inline player (instead of an external link), using the attachment’s direct blob URL.",
+      "id": "feature-ensure-the-authenticated-app-header-displays-the-xoroots-logo-anchored-in-the-top-left-of-the-viewport-on-all-logged-in-pages-i-e-wherever-header-is-rendered-with-consistent-sizing-and-spacing-so-it-is-visibly-top-left-not-centered-across-breakpoints",
+      "title": "Ensure the authenticated app header displays the XOROOTS logo anchored in the top-left of the viewport on all logged-in pages (i.e., wherever <Header /> is rendered), with consistent sizing and spacing so it is visibly top-left (not centered) across breakpoints.",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-update-the-post-attachment-ui-so-pdf-attachments-render-inline-in-place-instead-of-an-external-link-using-the-attachment-s-direct-blob-url",
-      "title": "Update the post attachment UI so PDF attachments render inline in-place (instead of an external link), using the attachment’s direct blob URL.",
+      "id": "feature-add-a-transparent-continuously-scrolling-background-using-the-xoroots-logo-on-authenticated-logged-in-pages-only-behind-the-dashboard-content-without-impacting-readability-or-blocking-interactions",
+      "title": "Add a transparent, continuously scrolling background using the XOROOTS logo on authenticated (logged-in) pages only, behind the Dashboard content, without impacting readability or blocking interactions.",
       "reqIds": [
         "REQ-2"
       ],
       "version": 1
     },
     {
-      "id": "feature-ensure-inline-viewers-are-used-consistently-anywhere-post-attachments-are-rendered-including-the-edit-post-modal-attachment-previews",
-      "title": "Ensure inline viewers are used consistently anywhere post attachments are rendered (including the edit-post modal attachment previews).",
+      "id": "feature-use-the-user-provided-xoroots-logo-asset-s-for-the-header-logo-and-the-authenticated-scrolling-background-preferably-via-the-centralized-branding-logo-src-reference-and-keep-delivery-as-static-frontend-assets-no-backend-proxying",
+      "title": "Use the user-provided XOROOTS logo asset(s) for the header logo and the authenticated scrolling background (preferably via the centralized BRANDING.logo.src reference) and keep delivery as static frontend assets (no backend proxying).",
       "reqIds": [
         "REQ-3"
       ],
@@ -38,12 +34,18 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Add inline viewers for videos and PDFs attached to posts (inline video playback + inline PDF viewing without download).",
+      "summary": "Place the user's logo in the top-left of the app UI.",
       "reqIds": [],
-      "status": "in_progress"
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Add the user's logo as a transparent scrolling background on logged-in pages.",
+      "reqIds": [],
+      "status": "pending"
     }
   ],
-  "projectName": "Rebuild attachment rendering with inline video and PDF viewers",
+  "projectName": "Place XOROOTS logo in top-left and add transparent scrolling logo background on authenticated pages",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

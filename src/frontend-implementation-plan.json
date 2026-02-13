@@ -1,63 +1,68 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Inline video and PDF viewers for post attachments",
+  "title": "Authenticated header logo positioning and scrolling watermark background",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Render video attachments as responsive inline players using the attachment direct blob URL.",
+      "summary": "Keep XOROOTS logo visibly anchored at the far left of the authenticated header across breakpoints using the shared BrandLogo component.",
       "acceptanceCriteria": [
-        "In the social feed, attachments detected as video (by mimeType starting with `video/` or filename extension match) render a playable inline `<video>` element with controls.",
-        "The inline video player uses `attachment.blob.getDirectURL()` as its source and does not require downloading the file first.",
-        "The inline video player layout is responsive and fits within the existing attachment grid without breaking card layout."
+        "When logged in, the XOROOTS logo is visible in the header at the far left edge of the header content area on all dashboard tabs/pages.",
+        "Logo remains top-left on mobile and desktop and does not shift to center due to container/grid changes.",
+        "Logo continues to render via the shared BrandLogo component (no duplicated hardcoded <img> paths in pages)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/utils/attachmentTypes.ts",
-          "operation": "create",
-          "description": "Add shared attachment type detection helpers (video/image/pdf by mimeType and filename extension) so video rendering rules are consistent across the app."
-        },
-        {
-          "path": "frontend/src/components/PostAttachmentRenderer.tsx",
+          "path": "frontend/src/components/Header.tsx",
           "operation": "modify",
-          "description": "Update video handling to render an inline HTML <video> player (controls enabled) sourced from `attachment.blob.getDirectURL()` (blob-storage ExternalBlob direct URL streaming/caching). Verify the component's usage instructions before implementing. Ensure the layout is responsive within the existing attachment grid (e.g., contain sizing, rounded corners, and not overflowing the card)."
+          "description": "Adjust the header layout so the BrandLogo stays anchored to the left edge of the header content area across breakpoints (e.g., ensure the left logo container uses mr-auto / justify-start behavior and cannot be centered by container/grid changes), while keeping the right-side controls aligned to the right."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Render PDF attachments inline using the attachment direct blob URL with a fallback open-in-new-tab action.",
+      "summary": "Render a subtle, continuously scrolling XOROOTS logo watermark background on authenticated pages only, behind dashboard content without blocking interactions.",
       "acceptanceCriteria": [
-        "In the social feed, attachments detected as PDF (mimeType `application/pdf` or filename ending in `.pdf`) render an inline PDF viewer (e.g., `<iframe>`/`<embed>`) using `attachment.blob.getDirectURL()` as the source.",
-        "PDFs are viewable in-place without requiring an explicit download action.",
-        "If inline PDF viewing fails to load (e.g., browser restriction), the UI still provides a clear fallback link/button to open the PDF in a new tab."
+        "When logged in, a repeating XOROOTS logo background is visible behind the dashboard UI with low opacity (subtle watermark effect).",
+        "The background scrolls/animates continuously (e.g., diagonal or horizontal drift) and loops seamlessly.",
+        "The background layer does not intercept clicks/scroll (pointer-events disabled) and stays behind all content (correct z-index).",
+        "When logged out (LandingPage), the scrolling watermark background is not present."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/PostAttachmentRenderer.tsx",
+          "path": "frontend/src/components/AuthenticatedScrollingLogoBackground.tsx",
+          "operation": "create",
+          "description": "Create a dedicated background layer component that renders a repeating logo watermark using BRANDING.logo.src, uses low opacity, sets pointer-events-none, and applies a seamless looping animation for continuous scrolling/drift."
+        },
+        {
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Update PDF handling to render an inline PDF viewer (<iframe> or <embed>) using `attachment.blob.getDirectURL()` (blob-storage ExternalBlob direct URL). Verify the component's usage instructions before implementing. Add a clear fallback control that opens the PDF in a new tab, and implement basic load-failure detection/state so the fallback is shown when inline viewing is blocked."
+          "description": "Wire the AuthenticatedScrollingLogoBackground to render only when authenticated, positioned behind the authenticated <Dashboard /> content (e.g., wrap the authenticated main area in a relative container with correct z-index layering so content stays readable and interactive)."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Add global CSS keyframes/utility classes needed for the continuous scrolling watermark animation (looping, subtle opacity), ensuring the background remains behind content and does not affect readability."
         }
       ]
     },
     {
       "id": "REQ-3",
-      "summary": "Use the same inline viewer behavior everywhere attachments are rendered, including EditPostModal previews, while preserving existing image and fallback behaviors.",
+      "summary": "Use the same centralized XOROOTS logo source (BRANDING.logo.src) for both the header logo and authenticated scrolling background as static frontend assets.",
       "acceptanceCriteria": [
-        "In `EditPostModal`, existing attachments that are videos or PDFs use the same inline viewer behavior as in the feed.",
-        "Image attachments continue to render inline as images as they do currently.",
-        "Non-video/non-PDF/non-image attachments continue to render using the existing fallback download/open link UI."
+        "Header logo and the authenticated scrolling background both reference the same centralized logo source (BRANDING.logo.src) or an explicitly documented branding constant used by BrandLogo and the background.",
+        "Logo assets are served from the frontend static assets directory (e.g., frontend/public/assets/...) and are not fetched via backend calls."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/PostAttachmentRenderer.tsx",
+          "path": "frontend/src/constants/branding.ts",
           "operation": "modify",
-          "description": "Refactor to rely on the shared attachment type detection utilities and ensure rendering branches remain: image => <img>, video => inline <video>, pdf => inline viewer with fallback, other => existing open/download UI. Verify the component's usage instructions before implementing."
+          "description": "Confirm/maintain the centralized BRANDING.logo.src static asset reference for XOROOTS so both BrandLogo and the authenticated background component share the same source of truth."
         },
         {
-          "path": "frontend/src/components/EditPostModal.tsx",
+          "path": "frontend/src/components/AuthenticatedScrollingLogoBackground.tsx",
           "operation": "modify",
-          "description": "Ensure attachment preview containers remain compatible with the updated inline viewers (video/PDF) by adjusting preview sizing classes as needed so inline viewers render cleanly in the modal grid without overflow, while keeping images and other file fallbacks unchanged."
+          "description": "Ensure the watermark background uses BRANDING.logo.src (same reference as BrandLogo) and does not introduce any new hardcoded logo paths or backend-fetched image URLs."
         }
       ]
     }

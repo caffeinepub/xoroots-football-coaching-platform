@@ -1,85 +1,75 @@
 {
   "kind": "build_request",
-  "title": "Rebuild attachment rendering with inline video and PDF viewers",
+  "title": "Place XOROOTS logo in top-left and add transparent scrolling logo background on authenticated pages",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the post attachment UI so video attachments render as an inline player (instead of an external link), using the attachment’s direct blob URL.",
+      "text": "Ensure the authenticated app header displays the XOROOTS logo anchored in the top-left of the viewport on all logged-in pages (i.e., wherever <Header /> is rendered), with consistent sizing and spacing so it is visibly top-left (not centered) across breakpoints.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-user-1"
+          "msg-1"
         ],
         "quotes": [
-          "rebuild with inline viewers"
+          "Put my logo in the top-left. Add my logo as a transparent scrolling background on the logged‑in pages.",
+          "apply both changes"
         ]
       },
       "acceptanceCriteria": [
-        "In the social feed, attachments detected as video (by mimeType starting with `video/` or filename extension match) render a playable inline `<video>` element with controls.",
-        "The inline video player uses `attachment.blob.getDirectURL()` as its source and does not require downloading the file first.",
-        "The inline video player layout is responsive and fits within the existing attachment grid without breaking card layout."
+        "When logged in, the XOROOTS logo is visible in the header at the far left edge of the header content area on all dashboard tabs/pages.",
+        "Logo remains top-left on mobile and desktop and does not shift to center due to container/grid changes.",
+        "Logo continues to render via the shared BrandLogo component (no duplicated hardcoded <img> paths in pages)."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Update the post attachment UI so PDF attachments render inline in-place (instead of an external link), using the attachment’s direct blob URL.",
+      "text": "Add a transparent, continuously scrolling background using the XOROOTS logo on authenticated (logged-in) pages only, behind the Dashboard content, without impacting readability or blocking interactions.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-user-1"
+          "msg-1"
         ],
         "quotes": [
-          "rebuild with inline viewers"
+          "Add my logo as a transparent scrolling background on the logged‑in pages."
         ]
       },
       "acceptanceCriteria": [
-        "In the social feed, attachments detected as PDF (mimeType `application/pdf` or filename ending in `.pdf`) render an inline PDF viewer (e.g., `<iframe>`/`<embed>`) using `attachment.blob.getDirectURL()` as the source.",
-        "PDFs are viewable in-place without requiring an explicit download action.",
-        "If inline PDF viewing fails to load (e.g., browser restriction), the UI still provides a clear fallback link/button to open the PDF in a new tab."
+        "When logged in, a repeating XOROOTS logo background is visible behind the dashboard UI with low opacity (subtle watermark effect).",
+        "The background scrolls/animates continuously (e.g., diagonal or horizontal drift) and loops seamlessly.",
+        "The background layer does not intercept clicks/scroll (pointer-events disabled) and stays behind all content (correct z-index).",
+        "When logged out (LandingPage), the scrolling watermark background is not present."
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Ensure inline viewers are used consistently anywhere post attachments are rendered (including the edit-post modal attachment previews).",
+      "text": "Use the user-provided XOROOTS logo asset(s) for the header logo and the authenticated scrolling background (preferably via the centralized BRANDING.logo.src reference) and keep delivery as static frontend assets (no backend proxying).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-user-1"
+          "msg-1"
         ],
         "quotes": [
-          "rebuild with inline viewers"
+          "apply both changes"
         ]
       },
       "acceptanceCriteria": [
-        "In `EditPostModal`, existing attachments that are videos or PDFs use the same inline viewer behavior as in the feed.",
-        "Image attachments continue to render inline as images as they do currently.",
-        "Non-video/non-PDF/non-image attachments continue to render using the existing fallback download/open link UI."
+        "Header logo and the authenticated scrolling background both reference the same centralized logo source (BRANDING.logo.src) or an explicitly documented branding constant used by BrandLogo and the background.",
+        "Logo assets are served from the frontend static assets directory (e.g., frontend/public/assets/...) and are not fetched via backend calls."
       ]
     }
   ],
   "constraints": [
-    "Do not edit any files under `frontend/src/components/ui` (compose existing shadcn components instead).",
-    "Do not edit files listed as immutable in SYSTEM_CONTEXT: `frontend/src/hooks/useInternetIdentity.ts`, `frontend/src/hooks/useInternetIdentity.tsx`, `frontend/src/hooks/useActor.ts`, `frontend/src/main.tsx`.",
-    "Keep backend architecture as a single Motoko actor in `backend/main.mo`; no new backend canisters/services."
+    "Do not modify files under frontend/src/components/ui (Shadcn components are read-only).",
+    "Do not edit immutable hook files: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx."
   ],
   "nonGoals": [
-    "Adding real-time streaming, adaptive bitrate, or WebSocket-based playback features.",
-    "Implementing third-party PDF rendering services or external CDN hosting for attachments.",
-    "Changing how attachments are stored or uploaded on the backend (this request is UI viewing only)."
+    "No changes to backend canister logic or data model.",
+    "No changes to authentication behavior or session restoration.",
+    "No redesign of the landing page hero background image beyond ensuring the scrolling logo background applies only to authenticated pages."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

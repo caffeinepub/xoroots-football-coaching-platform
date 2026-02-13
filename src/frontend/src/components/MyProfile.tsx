@@ -11,6 +11,7 @@ import { useInternetIdentity } from '../hooks/useInternetIdentity';
 import { ExternalBlob } from '../backend';
 import { Edit, Save, X, Upload, MapPin } from 'lucide-react';
 import AdminBadge from './AdminBadge';
+import { useImageBlobUrl } from '../utils/imageBlobUrl';
 
 const FOOTBALL_POSITIONS = [
   'Quarterback',
@@ -58,6 +59,9 @@ export default function MyProfile() {
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [showPositionDropdown, setShowPositionDropdown] = useState(false);
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
+
+  // Use the image blob URL hook for stored photo
+  const storedPhotoUrl = useImageBlobUrl(storedPhoto);
 
   // Cleanup preview URL on unmount
   useEffect(() => {
@@ -198,7 +202,7 @@ export default function MyProfile() {
   // Determine which photo to display
   const displayPhotoUrl = isEditing && photoPreview 
     ? photoPreview 
-    : (!photoLoading && storedPhoto ? storedPhoto.getDirectURL() : null);
+    : storedPhotoUrl.url;
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
@@ -422,7 +426,7 @@ export default function MyProfile() {
               <div className="flex flex-col items-center gap-4">
                 <div className="relative">
                   <Avatar className="h-32 w-32 border-2 border-border">
-                    {photoLoading ? (
+                    {storedPhotoUrl.isLoading ? (
                       <AvatarFallback className="text-3xl bg-muted">
                         <div className="h-6 w-6 animate-spin rounded-full border-4 border-primary border-t-transparent" />
                       </AvatarFallback>
@@ -466,7 +470,6 @@ export default function MyProfile() {
                   <h3 className="mb-2 font-semibold">Experience</h3>
                   <p className="text-sm text-muted-foreground">{Number(profile.experience)} years</p>
                 </div>
-
                 <div>
                   <h3 className="mb-2 font-semibold">Connections</h3>
                   <p className="text-sm text-muted-foreground">{connections.length} coaches</p>
@@ -475,10 +478,10 @@ export default function MyProfile() {
 
               {profile.coachingRoles.length > 0 && (
                 <div>
-                  <h3 className="mb-3 font-semibold">Coaching Roles</h3>
+                  <h3 className="mb-2 font-semibold">Coaching Roles</h3>
                   <div className="flex flex-wrap gap-2">
-                    {profile.coachingRoles.map((role, idx) => (
-                      <Badge key={idx} variant="default">
+                    {profile.coachingRoles.map((role) => (
+                      <Badge key={role} variant="default">
                         {role}
                       </Badge>
                     ))}
@@ -488,10 +491,10 @@ export default function MyProfile() {
 
               {profile.positionsCoached.length > 0 && (
                 <div>
-                  <h3 className="mb-3 font-semibold">Positions Coached</h3>
+                  <h3 className="mb-2 font-semibold">Positions Coached</h3>
                   <div className="flex flex-wrap gap-2">
-                    {profile.positionsCoached.map((position, idx) => (
-                      <Badge key={idx} variant="outline">
+                    {profile.positionsCoached.map((position) => (
+                      <Badge key={position} variant="secondary">
                         {position}
                       </Badge>
                     ))}
@@ -501,14 +504,12 @@ export default function MyProfile() {
 
               {profile.certifications.length > 0 && (
                 <div>
-                  <h3 className="mb-3 font-semibold">Certifications</h3>
-                  <div className="flex flex-wrap gap-2">
+                  <h3 className="mb-2 font-semibold">Certifications</h3>
+                  <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground">
                     {profile.certifications.map((cert, idx) => (
-                      <Badge key={idx} variant="secondary">
-                        {cert}
-                      </Badge>
+                      <li key={idx}>{cert}</li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
               )}
             </>

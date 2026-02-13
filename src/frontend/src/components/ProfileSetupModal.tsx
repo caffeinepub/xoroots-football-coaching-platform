@@ -4,12 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useSaveCallerUserProfile, useGetCoachPhoto } from '../hooks/useQueries';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { useSaveCallerUserProfile } from '../hooks/useQueries';
 import { useInternetIdentity } from '../hooks/useInternetIdentity';
 import { ExternalBlob } from '../backend';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Upload, X } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 
 const FOOTBALL_POSITIONS = [
   'Quarterback',
@@ -36,8 +36,15 @@ const COACHING_ROLES = [
   'Strength and Conditioning Coach',
 ];
 
-export default function ProfileSetupModal() {
+interface ProfileSetupModalProps {
+  isOpen: boolean;
+  onComplete: () => void;
+}
+
+export default function ProfileSetupModal({ isOpen, onComplete }: ProfileSetupModalProps) {
   const { identity } = useInternetIdentity();
+  const saveProfile = useSaveCallerUserProfile();
+
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
   const [experience, setExperience] = useState('');
@@ -51,9 +58,6 @@ export default function ProfileSetupModal() {
   const [showPositionDropdown, setShowPositionDropdown] = useState(false);
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
 
-  const saveProfile = useSaveCallerUserProfile();
-  const { data: storedPhoto, isLoading: photoLoading } = useGetCoachPhoto(identity?.getPrincipal() || null);
-
   // Cleanup preview URL on unmount
   useEffect(() => {
     return () => {
@@ -66,7 +70,7 @@ export default function ProfileSetupModal() {
   const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Revoke old preview URL if exists
+      // Revoke old preview URL if it's a blob URL
       if (photoPreview && photoPreview.startsWith('blob:')) {
         URL.revokeObjectURL(photoPreview);
       }
@@ -101,12 +105,8 @@ export default function ProfileSetupModal() {
     setCoachingRoles(coachingRoles.filter((r) => r !== role));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!identity || !name.trim() || !specialty.trim()) {
-      return;
-    }
+  const handleSubmit = async () => {
+    if (!identity || !name.trim()) return;
 
     let photoExtBlob: ExternalBlob | undefined = undefined;
     if (photoBlob) {
@@ -131,50 +131,51 @@ export default function ProfileSetupModal() {
       location: location.trim(),
       coachingRoles,
     });
+
+    // Revoke blob URL after save
+    if (photoPreview && photoPreview.startsWith('blob:')) {
+      URL.revokeObjectURL(photoPreview);
+    }
+
+    onComplete();
   };
 
-  // Determine which photo to display
-  const displayPhotoUrl = photoPreview || (!photoLoading && storedPhoto ? storedPhoto.getDirectURL() : null);
-
   return (
-    <Dialog open={true}>
-      <DialogContent 
-        className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 text-foreground dark:text-white border-2 border-border shadow-2xl"
-        style={{ backgroundColor: 'rgba(255,255,255,1)' }}
-        onInteractOutside={(e) => e.preventDefault()}
-      >
+    <Dialog open={isOpen} onOpenChange={() => {}}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 text-foreground dark:text-white backdrop-blur-none border-2 border-border shadow-2xl">
         <DialogHeader>
-          <DialogTitle className="text-foreground dark:text-white">Welcome to XOROOTS!</DialogTitle>
-          <DialogDescription className="text-muted-foreground dark:text-gray-400">Let's set up your coaching profile to get started.</DialogDescription>
+          <DialogTitle className="text-foreground dark:text-white">Complete Your Profile</DialogTitle>
+          <DialogDescription className="text-muted-foreground dark:text-gray-400">
+            Tell us about yourself to get started with XOROOTS
+          </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-4">
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <Avatar className="h-24 w-24 border-2 border-border">
-                {photoLoading ? (
-                  <AvatarFallback className="bg-muted">
-                    <div className="h-6 w-6 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-                  </AvatarFallback>
-                ) : displayPhotoUrl ? (
+                {photoPreview ? (
                   <AvatarImage 
-                    src={displayPhotoUrl} 
-                    alt="Profile"
+                    src={photoPreview} 
+                    alt="Profile preview" 
                     className="object-cover"
                   />
                 ) : (
-                  <AvatarFallback className="bg-muted">
-                    <Upload className="h-8 w-8 text-muted-foreground" />
+                  <AvatarFallback className="text-2xl bg-muted">
+                    {name.charAt(0).toUpperCase() || 'C'}
                   </AvatarFallback>
                 )}
               </Avatar>
             </div>
-            <Label htmlFor="photo" className="cursor-pointer">
+            <Label htmlFor="photo-upload" className="cursor-pointer">
               <Button type="button" variant="outline" size="sm" asChild>
-                <span>Upload Photo</span>
+                <span>
+                  <Upload className="mr-2 h-4 w-4" />
+                  Upload Photo
+                </span>
               </Button>
               <Input
-                id="photo"
+                id="photo-upload"
                 type="file"
                 accept="image/*"
                 className="hidden"
@@ -184,13 +185,14 @@ export default function ProfileSetupModal() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-foreground dark:text-white">Full Name *</Label>
+            <Label htmlFor="name" className="text-foreground dark:text-white">
+              Full Name <span className="text-red-500">*</span>
+            </Label>
             <Input
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="John Doe"
-              required
+              placeholder="Enter your full name"
               className="bg-white dark:bg-gray-800 text-foreground dark:text-white border-input dark:border-gray-700"
             />
           </div>
@@ -207,29 +209,30 @@ export default function ProfileSetupModal() {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="experience" className="text-foreground dark:text-white">Years of Experience</Label>
-            <Input
-              id="experience"
-              type="number"
-              value={experience}
-              onChange={(e) => setExperience(e.target.value)}
-              placeholder="5"
-              min="0"
-              className="bg-white dark:bg-gray-800 text-foreground dark:text-white border-input dark:border-gray-700"
-            />
-          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="experience" className="text-foreground dark:text-white">Years of Experience</Label>
+              <Input
+                id="experience"
+                type="number"
+                value={experience}
+                onChange={(e) => setExperience(e.target.value)}
+                placeholder="0"
+                min="0"
+                className="bg-white dark:bg-gray-800 text-foreground dark:text-white border-input dark:border-gray-700"
+              />
+            </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="specialty" className="text-foreground dark:text-white">Coaching Specialty *</Label>
-            <Input
-              id="specialty"
-              value={specialty}
-              onChange={(e) => setSpecialty(e.target.value)}
-              placeholder="e.g., Offensive Coordinator, Defensive Strategy"
-              required
-              className="bg-white dark:bg-gray-800 text-foreground dark:text-white border-input dark:border-gray-700"
-            />
+            <div className="space-y-2">
+              <Label htmlFor="specialty" className="text-foreground dark:text-white">Coaching Specialty</Label>
+              <Input
+                id="specialty"
+                value={specialty}
+                onChange={(e) => setSpecialty(e.target.value)}
+                placeholder="e.g., Offensive Strategy"
+                className="bg-white dark:bg-gray-800 text-foreground dark:text-white border-input dark:border-gray-700"
+              />
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -345,16 +348,21 @@ export default function ProfileSetupModal() {
               id="certifications"
               value={certifications}
               onChange={(e) => setCertifications(e.target.value)}
-              placeholder="USA Football Certified, AFCA Member, NFLPA Certified"
-              rows={3}
+              placeholder="e.g., AFCA Certified, USA Football Level 1"
+              rows={2}
               className="bg-white dark:bg-gray-800 text-foreground dark:text-white border-input dark:border-gray-700"
             />
           </div>
+        </div>
 
-          <Button type="submit" className="w-full" disabled={saveProfile.isPending}>
-            {saveProfile.isPending ? 'Creating Profile...' : 'Create Profile'}
+        <div className="flex justify-end gap-2 pt-4">
+          <Button
+            onClick={handleSubmit}
+            disabled={!name.trim() || saveProfile.isPending}
+          >
+            {saveProfile.isPending ? 'Creating Profile...' : 'Complete Setup'}
           </Button>
-        </form>
+        </div>
       </DialogContent>
     </Dialog>
   );
