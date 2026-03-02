@@ -1,0 +1,69 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Full-color XOROOTS header logo + subtle watermark logo for authenticated scrolling background",
+  "requirements": [
+    {
+      "id": "REQ-9",
+      "summary": "Ensure the full-color XOROOTS logo is available as a static asset at the exact BRANDING.logo.src path and BrandLogo renders it.",
+      "acceptanceCriteria": [
+        "`frontend/public/assets/generated/xoroots-logo.dim_300x100.png` exists and loads in the browser at `/assets/generated/xoroots-logo.dim_300x100.png`.",
+        "`BrandLogo` renders the image (not the text fallback) when the asset is present."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/xoroots-logo.dim_300x100.png",
+          "operation": "create",
+          "description": "Add/commit the full-color XOROOTS logo static image at this exact path so it is served at `/assets/generated/xoroots-logo.dim_300x100.png` and continues to match `BRANDING.logo.src`."
+        },
+        {
+          "path": "frontend/src/components/BrandLogo.tsx",
+          "operation": "modify",
+          "description": "Confirm BrandLogo continues to use `BRANDING.logo.src` for the header/hero full-color logo and only falls back to text on actual load error (no path changes to `BRANDING.logo.src`)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Create a separate transparent watermark logo asset and use it for the authenticated scrolling background while keeping the header logo unchanged.",
+      "acceptanceCriteria": [
+        "A second static image asset exists at `frontend/public/assets/generated/xoroots-logo-watermark.dim_300x100.png` and loads in the browser at `/assets/generated/xoroots-logo-watermark.dim_300x100.png`.",
+        "The authenticated scrolling background uses `/assets/generated/xoroots-logo-watermark.dim_300x100.png` (not the full-color header logo asset).",
+        "The header continues to render the full-color logo using `BRANDING.logo.src` unchanged."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/xoroots-logo-watermark.dim_300x100.png",
+          "operation": "create",
+          "description": "Add/commit the subtle transparent watermark-style XOROOTS logo static image at this exact path so it is served at `/assets/generated/xoroots-logo-watermark.dim_300x100.png`."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Update the authenticated scrolling background CSS to reference `/assets/generated/xoroots-logo-watermark.dim_300x100.png` for the repeating pattern, ensuring the header continues using `BRANDING.logo.src` unchanged."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Refine authenticated scrolling watermark background styling for subtlety/readability in light and dark themes and ensure it never blocks interactions or appears when logged out.",
+      "acceptanceCriteria": [
+        "Background remains behind dashboard content (content stays above it) and does not capture pointer events.",
+        "Watermark opacity remains subtle in both themes (light and dark) and does not reduce text readability.",
+        "Scrolling animation remains continuous on authenticated pages only and does not appear on the logged-out landing page."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Adjust `.authenticated-scrolling-logo-background` and `.logo-pattern` styling so the watermark remains subtle and readable in both themes (e.g., theme-specific opacity/mix-blend choices), remains behind content (z-index layering preserved), and cannot capture pointer events."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Verify the authenticated-only rendering condition for `AuthenticatedScrollingLogoBackground` remains intact so the scrolling watermark never appears on the logged-out landing page."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 7,
+  "summary": "Create a fresh new app baseline and apply branding updates: show the full-color uploaded logo in the top-left header and add a subtle transparent watermark-style scrolling logo background across authenticated/logged-in pages.",
+  "architectural_notes": [
+    "Branding configuration via BRANDING constants (logo src/alt and related styling) used by header and background components.",
+    "Support different logo treatments for header vs authenticated background (e.g., header uses full-color asset; background uses watermark styling via CSS opacity/filter or a separate derived asset)."
+  ],
+  "known_issues": [
+    "Previous build/deploy claims did not correspond to an actual codebase; requires creating a fresh app project before applying branding features.",
+    "Logo may not appear if the branding path (/assets/generated/xoroots-logo.dim_300x100.png) does not exist or the asset is not placed/served at that exact location."
+  ],
+  "isFixRequest": true,
+  "imageRequirements": "## Required Images\n- Full-color XOROOTS logo on a transparent background, tightly framed for a wide banner (xoroots-logo.dim_300x100.png, 300x100)\n- Grayscale/monochrome XOROOTS logo on a transparent background with a soft, watermark look (xoroots-logo-watermark.dim_300x100.png, 300x100)",
+  "existing_features": [
+    {
+      "id": "feature-ensure-the-project-rebuild-produces-a-clean-working-baseline-that-compiles-and-runs-with-the-current-app-layout-behavior-unchanged-landing-page-when-logged-out-dashboard-header-when-logged-in",
+      "title": "Ensure the project rebuild produces a clean, working baseline that compiles and runs with the current app layout/behavior unchanged (Landing page when logged out; Dashboard + Header when logged in).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-transparent-continuously-scrolling-xoroots-logo-background-on-authenticated-pages-only-behind-dashboard-content-using-the-same-logo-asset-and-without-blocking-interactions-or-harming-readability",
+      "title": "Implement a transparent, continuously scrolling XOROOTS logo background on authenticated pages only, behind dashboard content, using the same logo asset and without blocking interactions or harming readability.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-and-use-a-separate-subtle-transparent-watermark-style-variant-of-the-xoroots-logo-for-the-authenticated-scrolling-background-while-keeping-the-header-logo-full-color",
+      "title": "Create and use a separate subtle transparent watermark-style variant of the XOROOTS logo for the authenticated scrolling background, while keeping the header logo full-color.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-authenticated-scrolling-logo-background-styling-so-the-watermark-remains-subtle-and-readable-behind-content-in-both-light-and-dark-themes-no-interaction-blocking",
+      "title": "Update the authenticated scrolling logo background styling so the watermark remains subtle and readable behind content in both light and dark themes (no interaction blocking).",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create a fresh new app baseline project to apply branding changes cleanly",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Implement top-left header logo using BRANDING.logo.src and BRANDING.logo.alt",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Add authenticated scrolling transparent logo background using branding asset and CSS",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Create/verify a clean, working baseline app codebase that builds and runs, keeping the current layout and behavior unchanged, and ensuring authenticated pages render <Header /> and the dashboard as they do now.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Add the uploaded XOROOTS logo as a static frontend asset and use it consistently via the centralized branding constants (BRANDING.logo.src and BRANDING.logo.alt).",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Ensure the authenticated app header displays the XOROOTS logo anchored in the top-left on all logged-in pages using the existing <BrandLogo size=\"small\" /> rendering, with consistent spacing across breakpoints.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Implement a transparent, continuously scrolling logo background on authenticated pages only, behind dashboard content, using the same XOROOTS logo asset and without blocking interactions or harming readability.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Add the uploaded XOROOTS logo as a static frontend asset at the exact path referenced by branding constants and ensure it is served correctly: /assets/generated/xoroots-logo.dim_300x100.png.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Ensure the authenticated header displays the XOROOTS logo anchored in the top-left on all logged-in pages using the existing <BrandLogo size=\"small\" /> component, with consistent spacing across breakpoints.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Use full-color logo in the header and a subtle transparent/watermark-style variant for the authenticated scrolling background (via separate asset or styling like opacity/grayscale).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Add the uploaded XOROOTS logo image to the frontend static assets so the full-color logo is served from the exact path referenced by BRANDING.logo.src: `/assets/generated/xoroots-logo.dim_300x100.png`.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Create fresh baseline app and apply XOROOTS logo branding (header + scrolling authenticated background)",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

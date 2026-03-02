@@ -1,0 +1,64 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-16T15:27:29.028Z",
+  "summary": "Diff mainly adds CSS for an authenticated scrolling watermark background pointing to a watermark logo path, plus updates to metadata/summary files. It does not add the required static image assets, and there is no direct code evidence that BrandLogo/header behavior or authenticated-only rendering has been wired up beyond the CSS class.",
+  "missing_requirements": [
+    {
+      "id": "REQ-9",
+      "requirement": "Add the full-color XOROOTS logo static asset at `frontend/public/assets/generated/xoroots-logo.dim_300x100.png` so it loads at `/assets/generated/xoroots-logo.dim_300x100.png`, and ensure `BrandLogo` renders the image (not text fallback) when present.",
+      "reason": "No new files were added, and there is no evidence in the diff that the PNG exists under `frontend/public/assets/generated/` or that `BrandLogo` logic was updated/verified to render the image.",
+      "evidence": [
+        "file-diff: ADDED FILES: none",
+        "frontend/src/index.css (only adds background CSS; no BrandLogo changes shown)"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "Add a separate watermark-style logo asset at `frontend/public/assets/generated/xoroots-logo-watermark.dim_300x100.png` and use it for the authenticated scrolling background while keeping the header using `BRANDING.logo.src` unchanged.",
+      "reason": "The CSS references `/assets/generated/xoroots-logo-watermark.dim_300x100.png`, but the diff adds no static asset file at the required path, and there is no evidence that the header continues to use `BRANDING.logo.src` unchanged (no header/branding code changes shown).",
+      "evidence": [
+        "file-diff: ADDED FILES: none",
+        "frontend/src/index.css (references `/assets/generated/xoroots-logo-watermark.dim_300x100.png`)"
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "requirement": "Ensure the scrolling watermark background is subtle/readable in light and dark themes, stays behind content without blocking interactions, and appears only on authenticated pages (not the logged-out landing page).",
+      "reason": "CSS includes pointer-events:none, z-index, and theme-tuned opacity, but the diff provides no code evidence that the background is mounted only for authenticated pages and not shown on the landing page (no App/Landing code changes included).",
+      "evidence": [
+        "frontend/src/index.css (pointer-events:none; opacity tweaks for .dark)",
+        "file-diff shows no modifications to App/Landing components (only 3 modified files: index.css, frontend-file-summaries.txt, project_state.json)"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "React Query hooks updated to use an Attachment[] type for post create/update, including sending blob/mimeType/fileName metadata for PDF/video/image attachments.",
+      "reason": "Not requested in the BuildRequest (non-goal: no new dashboard features/behavior changes beyond watermark asset/style). The only actual code diff shown is CSS; these unrelated changes appear as claims in a summary file.",
+      "evidence": [
+        "frontend-file-summaries.txt (entry for `frontend/src/hooks/useQueries.ts`)"
+      ]
+    },
+    {
+      "description": "New/updated SocialFeed behavior including attachments support, post editing, comment deletion/likes, and robust image rendering fallback helpers.",
+      "reason": "Not requested; beyond scope/non-goals. Appears only as a description in the modified summaries, not as evidenced code changes in the provided diff.",
+      "evidence": [
+        "frontend-file-summaries.txt (entry for `frontend/src/components/SocialFeed.tsx`)"
+      ]
+    },
+    {
+      "description": "Custom ImageCropper component and adding `react-easy-crop` dependency for image cropping.",
+      "reason": "Not requested and outside branding/watermark scope; appears only in the modified summaries.",
+      "evidence": [
+        "frontend-file-summaries.txt (entries for `frontend/src/components/ImageCropper.tsx` and `frontend/package.json`)"
+      ]
+    }
+  ],
+  "confidence": 0.62,
+  "changed_files": [
+    "frontend-file-summaries.txt",
+    "frontend/src/index.css",
+    "project_state.json"
+  ]
+}

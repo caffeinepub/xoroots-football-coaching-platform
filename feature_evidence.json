@@ -1,0 +1,45 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-create-and-use-a-separate-subtle-transparent-watermark-style-variant-of-the-xoroots-logo-for-the-authenticated-scrolling-background-while-keeping-the-header-logo-full-color",
+      "featureTitle": "Create and use a separate subtle transparent watermark-style variant of the XOROOTS logo for the authenticated scrolling background, while keeping the header logo full-color.",
+      "files": [
+        "frontend/src/index.css"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-authenticated-scrolling-logo-background-styling-so-the-watermark-remains-subtle-and-readable-behind-content-in-both-light-and-dark-themes-no-interaction-blocking",
+      "featureTitle": "Update the authenticated scrolling logo background styling so the watermark remains subtle and readable behind content in both light and dark themes (no interaction blocking).",
+      "files": [
+        "frontend/src/index.css"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

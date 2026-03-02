@@ -1,0 +1,88 @@
+{
+  "kind": "build_request",
+  "title": "Use full-color XOROOTS logo in header and a subtle watermark variant for authenticated scrolling background",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-9",
+      "text": "Add the uploaded XOROOTS logo image to the frontend static assets so the full-color logo is served from the exact path referenced by BRANDING.logo.src: `/assets/generated/xoroots-logo.dim_300x100.png`.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-recent-4"
+        ],
+        "quotes": [
+          "Use full‑color in header and a subtle transparent watermark in background"
+        ]
+      },
+      "acceptanceCriteria": [
+        "`frontend/public/assets/generated/xoroots-logo.dim_300x100.png` exists and loads in the browser at `/assets/generated/xoroots-logo.dim_300x100.png`.",
+        "`BrandLogo` renders the image (not the text fallback) when the asset is present."
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Create and use a separate subtle transparent watermark-style variant of the XOROOTS logo for the authenticated scrolling background, while keeping the header logo full-color.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-recent-4"
+        ],
+        "quotes": [
+          "Use full‑color in header and a subtle transparent watermark in background"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A second static image asset exists at `frontend/public/assets/generated/xoroots-logo-watermark.dim_300x100.png` and loads in the browser at `/assets/generated/xoroots-logo-watermark.dim_300x100.png`.",
+        "The authenticated scrolling background uses `/assets/generated/xoroots-logo-watermark.dim_300x100.png` (not the full-color header logo asset).",
+        "The header continues to render the full-color logo using `BRANDING.logo.src` unchanged."
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Update the authenticated scrolling logo background styling so the watermark remains subtle and readable behind content in both light and dark themes (no interaction blocking).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-recent-4"
+        ],
+        "quotes": [
+          "Use full‑color in header and a subtle transparent watermark in background"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Background remains behind dashboard content (content stays above it) and does not capture pointer events.",
+        "Watermark opacity remains subtle in both themes (light and dark) and does not reduce text readability.",
+        "Scrolling animation remains continuous on authenticated pages only and does not appear on the logged-out landing page."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not edit files under `frontend/src/components/ui` (compose them instead).",
+    "Do not edit any paths listed in `frontend.immutablePaths` in SYSTEM_CONTEXT.",
+    "Keep backend as a single Motoko actor (no new backend services).",
+    "Keep `BRANDING.logo.src` pointing to `/assets/generated/xoroots-logo.dim_300x100.png` so the header uses the full-color asset consistently."
+  ],
+  "nonGoals": [
+    "Changing authentication flow (Internet Identity).",
+    "Adding new dashboard features or altering existing dashboard/landing page behavior beyond the watermark asset/style change.",
+    "Introducing any backend storage or schema changes for branding assets."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Full-color XOROOTS logo on a transparent background, tightly framed for a wide banner (xoroots-logo.dim_300x100.png, 300x100)",
+      "Grayscale/monochrome XOROOTS logo on a transparent background with a soft, watermark look (xoroots-logo-watermark.dim_300x100.png, 300x100)"
+    ],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

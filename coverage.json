@@ -1,0 +1,62 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-16T15:27:29.030Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 3,
+    "implemented": 2,
+    "items": [
+      {
+        "id": "REQ-10",
+        "summary": "Create and use a separate subtle transparent watermark-style variant of the XOROOTS logo for the authenticated scrolling background, while keeping the header logo full-color.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/public/assets/generated/xoroots-logo-watermark.dim_300x100.png",
+          "frontend/src/index.css"
+        ],
+        "matchedFiles": [
+          "frontend/src/index.css"
+        ]
+      },
+      {
+        "id": "REQ-11",
+        "summary": "Update the authenticated scrolling logo background styling so the watermark remains subtle and readable behind content in both light and dark themes (no interaction blocking).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/index.css",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/index.css"
+        ]
+      },
+      {
+        "id": "REQ-9",
+        "summary": "Add the uploaded XOROOTS logo image to the frontend static assets so the full-color logo is served from the exact path referenced by BRANDING.logo.src: `/assets/generated/xoroots-logo.dim_300x100.png`.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/public/assets/generated/xoroots-logo.dim_300x100.png",
+          "frontend/src/components/BrandLogo.tsx"
+        ],
+        "matchedFiles": []
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/public/assets/generated/xoroots-logo-watermark.dim_300x100.png, 300x100",
+    "frontend/public/assets/generated/xoroots-logo.dim_300x100.png, 300x100",
+    "frontend/src/index.css",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}
